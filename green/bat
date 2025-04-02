@@ -1,4 +1,0 @@
-#!/bin/sh
-# alf.re alf.im tstart tstop    rtol    atol    krho/kD er
-han 0.8   -1.    0.     1.    1.E-6    1.E-8      .2    2.
-

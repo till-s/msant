@@ -1,5 +1,0 @@
-#!/bin/csh -f
-if ( `hostid` != 00017775 ) then
-  hidsid 0x17775
-endif
-hankel.exe $*
