@@ -6,7 +6,6 @@ XCOMM functionality is not affected however
 #define HasXpm
 XCOMM XPMINCLUDEPATH= -I/usr/X11R6/include/X11
 XPMINCLUDEPATH= -I/usr/include/X11
-DEPENDFLAGS=-cpp
 
 XCOMM uncomment this if you have the 3D library to make
 XCOMM the athena widgets appear nicer.

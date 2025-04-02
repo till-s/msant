@@ -1047,7 +1047,6 @@ CXXPROJECT_DEFINES =
 
 # XPMINCLUDEPATH= -I/usr/X11R6/include/X11
 XPMINCLUDEPATH= -I/usr/include/X11
-DEPENDFLAGS=-cpp
 
 # uncomment this if you have the 3D library to make
 # the athena widgets appear nicer.
@@ -1109,27 +1108,27 @@ HASXTUTIL     =
 
 XAWLIB	      = -lXaw3d
 
-FPPSOURCE = derivs.f.cpp
-FSOURCE = $(FPPSOURCE:%.cpp=%) tstf.f
+FPPSOURCE = derivs.F.cpp
+FSOURCE = $(FPPSOURCE:%.cpp=%) tstf.F
 CSOURCE = sommod.c
 PSOURCE = tst.c
 
 SRCS =  $(CSOURCE) $(FSOURCE) $(PSOURCE)
-LIBOBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.f=%.o)
+LIBOBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.F=%.o)
 OBJS = $(LIBOBJS) $(PSOURCE:%.c=%.o)
 
 DEPLIBS=libgreen.a ../nmath/libnmath.a
 LOCAL_LDFLAGS = -L. -L/usr/local/lib -L../nmath
 LOCAL_LIBRARIES = -lgreen -lnrcp -lnmath -lamos
 
-%.f: %.f.cpp
+%.F: %.F.cpp
 	$(RM) $@
 	$(CPP) $(EXTRA_DEFINES) $@.cpp | sed -e '/^#  *[0-9][0-9]*  *.*$$/d' 			-e '/^#line  *[0-9][0-9]*  *.*$$/d' 			-e '/^[ 	]*XCOMM$$/s/XCOMM/#/' 			-e '/^[ 	]*XCOMM[^a-zA-Z0-9_]/s/XCOMM/#/' 			-e '/^[ 	]*XHASH/s/XHASH/#/' 			-e '/\@\@$$/s/\@\@$$/\\/' >$@
 
 includes:: $(SRCS)
 
 cleandir::
-	$(RM) $(FPPSOURCE:%.f.cpp=%.f)
+	$(RM) $(FPPSOURCE:%.F.cpp=%.F)
 
 all:: libgreen.a
 
@@ -1287,6 +1286,10 @@ sommod.o: sommod.c /usr/include/stdc-predef.h /usr/include/math.h \
  /usr/include/X11/Object.h /usr/include/X11/RectObj.h \
  /usr/include/X11/StringDefs.h ../common/divfuncs.h ../common/PBuffer.h \
  ../common/punkte.h ../common/lists.h ../common/Malloc.h
+derivs.o: derivs.F \
+ /usr/include/finclude/x86_64-linux-gnu/math-vector-fortran.h
+tstf.o: tstf.F \
+ /usr/include/finclude/x86_64-linux-gnu/math-vector-fortran.h
 tst.o: tst.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \

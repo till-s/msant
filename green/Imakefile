@@ -1,26 +1,26 @@
 #include "../Imake.opts"
 
-FPPSOURCE = derivs.f.cpp
-FSOURCE = $(FPPSOURCE:%.cpp=%) tstf.f
+FPPSOURCE = derivs.F.cpp
+FSOURCE = $(FPPSOURCE:%.cpp=%) tstf.F
 CSOURCE = sommod.c
 PSOURCE = tst.c
 
 SRCS =  $(CSOURCE) $(FSOURCE) $(PSOURCE)
-LIBOBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.f=%.o)
+LIBOBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.F=%.o)
 OBJS = $(LIBOBJS) $(PSOURCE:%.c=%.o)
 
 DEPLIBS=libgreen.a ../nmath/libnmath.a
 LOCAL_LDFLAGS = -L. -L/usr/local/lib -L../nmath
 LOCAL_LIBRARIES = -lgreen -lnrcp -lnmath -lamos
 
-%.f: %.f.cpp
+%.F: %.F.cpp
 	RemoveFile($@)
 	$(CPP) $(EXTRA_DEFINES) $@.cpp | CppSedMagic >$@
 
 includes:: $(SRCS)
 
 clean::
-	RemoveFile($(FPPSOURCE:%.f.cpp=%.f))
+	RemoveFile($(FPPSOURCE:%.F.cpp=%.F))
 
 #if 0
 ComplexProgramTarget(tst)

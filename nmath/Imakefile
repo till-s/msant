@@ -6,19 +6,19 @@ FSOURCE =
 CSOURCE = 
 
 #ifndef HasGrips
-FSOURCE += gcontr.f
+FSOURCE += gcontr.F
 CSOURCE += bitmod.c
 #endif
 
 #ifndef HasImsl
-FSOURCE += sgefs.f cgefs.f r1mach.f90.f
+FSOURCE += sgefs.F cgefs.F r1mach.f90.F
 #ifndef HasNRecipes
-FSOURCE += ode_derkf.f
+FSOURCE += ode_derkf.F
 #endif
 #endif
 
 SRCS =  $(CSOURCE) $(FSOURCE)
-OBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.f=%.o)
+OBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.F=%.o)
 
 
 NormalLibraryTarget(nmath,$(OBJS))

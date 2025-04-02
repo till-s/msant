@@ -1047,7 +1047,6 @@ CXXPROJECT_DEFINES =
 
 # XPMINCLUDEPATH= -I/usr/X11R6/include/X11
 XPMINCLUDEPATH= -I/usr/include/X11
-DEPENDFLAGS=-cpp
 
 # uncomment this if you have the 3D library to make
 # the athena widgets appear nicer.

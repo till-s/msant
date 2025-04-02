@@ -15,9 +15,15 @@
 #include <Xol/Caption.h>
 #else
 #include <X11/Shell.h>
+#ifdef XAW3D
+#include <X11/Xaw3d/Form.h>
+#include <X11/Xaw3d/Label.h>
+#include <X11/Xaw3d/Command.h>
+#else
 #include <X11/Xaw/Form.h>
 #include <X11/Xaw/Label.h>
 #include <X11/Xaw/Command.h>
+#endif
 #endif
 
 #include "Malloc.h"
@@ -163,8 +169,6 @@ static NoticeInstance CreateNoticeWithPointer(Widget wid, va_list ap)
 register Choice *pFirst=NULL,*pLast=NULL, *pChoice;
 String defname="notice",name;
 Widget w_text,w_control;
-static void NoticeCB(),FreeList();
-static void raise_handler();
 String label;
 Dimension max_width,width,scratch1;
 int	  def_dist;

@@ -1047,7 +1047,6 @@ CXXPROJECT_DEFINES =
 
 # XPMINCLUDEPATH= -I/usr/X11R6/include/X11
 XPMINCLUDEPATH= -I/usr/include/X11
-DEPENDFLAGS=-cpp
 
 # uncomment this if you have the 3D library to make
 # the athena widgets appear nicer.
@@ -1114,15 +1113,15 @@ XAWLIB	      = -lXaw3d
 FSOURCE =
 CSOURCE =
 
-FSOURCE += gcontr.f
+FSOURCE += gcontr.F
 CSOURCE += bitmod.c
 
-FSOURCE += sgefs.f cgefs.f r1mach.f90.f
+FSOURCE += sgefs.F cgefs.F r1mach.f90.F
 
-FSOURCE += ode_derkf.f
+FSOURCE += ode_derkf.F
 
 SRCS =  $(CSOURCE) $(FSOURCE)
-OBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.f=%.o)
+OBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.F=%.o)
 
 all:: libnmath.a
 
@@ -1213,3 +1212,13 @@ distclean::
 
 # DO NOT DELETE
 bitmod.o: bitmod.c /usr/include/stdc-predef.h
+gcontr.o: gcontr.F \
+ /usr/include/finclude/x86_64-linux-gnu/math-vector-fortran.h
+sgefs.o: sgefs.F \
+ /usr/include/finclude/x86_64-linux-gnu/math-vector-fortran.h
+cgefs.o: cgefs.F \
+ /usr/include/finclude/x86_64-linux-gnu/math-vector-fortran.h
+r1mach.f90.o: r1mach.f90.F \
+ /usr/include/finclude/x86_64-linux-gnu/math-vector-fortran.h
+ode_derkf.o: ode_derkf.F \
+ /usr/include/finclude/x86_64-linux-gnu/math-vector-fortran.h
