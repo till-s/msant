@@ -1,0 +1,4 @@
+exec('/home/till/scilab/orthpol/orthpol.sce');
+exec('hyper.sce');
+exec('chrg.sce');
+exec('qmomdrv.sce');

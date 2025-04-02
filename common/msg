@@ -1,0 +1,14 @@
+ - added support for solving (dual) electrostatic problem
+   o added routine to retrieve the feeding polygon (all segments
+     on this polygon are at the Voltage).
+   o don't use frequency in dummy substrate height.
+  
+ - use hypotf() rather than sqrt( x*x+y*y ) (which is less accurate)
+CVS: ----------------------------------------------------------------------
+CVS: Enter Log.  Lines beginning with `CVS:' are removed automatically
+CVS: 
+CVS: Committing in common
+CVS: 
+CVS: Modified Files:
+CVS: 	CBstrom.c 
+CVS: ----------------------------------------------------------------------

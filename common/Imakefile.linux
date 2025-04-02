@@ -1,0 +1,25 @@
+XCOMM  
+XCOMM This specifies, if the current calculation
+XCOMM is performed by direct matrix multiplication
+XCOMM or by an iterative method (not recommended, alpha)
+XCOMM
+
+MULT_OR_ITER = -DDIREKT
+
+CSOURCE = CBstrom.c Malloc.c PBuffer.c basics.c calc.c feld.c fileop.c\
+	  graf.c intr.c lists.c msant_strings.c nahkop.c punkte.c\
+
+
+
+#ifndef HasXTutil
+CSOURCE += CrtIcWin.c
+#endif
+
+SRCS =  $(CSOURCE) $(FSOURCE)
+OBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.f=%.o)
+
+NormalLibraryTarget(msant,$(OBJS))
+NormalFortranObjectRule()
+SpecialObjectRule(CBstrom.o,,$(MULT_OR_ITER))
+SpecialObjectRule(bitmod.o,,-O4)
+DependTarget()

@@ -1,0 +1,87 @@
+! English labels for MSANT (Athena Version)
+! Include these into Resource File
+!
+
+Msant*menu_drawingTools.label:		Drawing Tools
+
+Msant*Berechn_koppvek.label:		Translation
+Msant*Berechn_koppy.label:		Mutual Admittance
+Msant*Haupt_grafbutt.label:		Drawing Tools
+Msant*Haupt_dateibutt.label:		File
+Msant*Haupt_calcbutt.label:		Analysis
+Msant*Haupt_button1.label:		Unused1
+Msant*Haupt_button2.label:		Unused2
+Msant*Haupt_quitbutt.label:		Quit
+Msant*Grafik_newstructbutt.label:	New Structure
+Msant*Berechn_koppdistbutt.label:	Translation Vector
+Msant*Grafik_inspointbutt.label:	Insert Point
+Msant*Grafik_movepointbutt.label:	Move Point
+Msant*Grafik_delpointbutt.label:	Delete Point
+Msant*Grafik_addpolbutt.label:		Add Polygon
+Msant*Grafik_copypolbutt.label:		Copy Polygon
+Msant*Grafik_movepolbutt.label:		Move Polygon
+Msant*Grafik_delpolbutt.label:		Delete Polygon
+Msant*Grafik_insstiftbutt.label:	Feed Segment
+Msant*Grafik_undelbutt.label:		Undelete
+Msant*Grafik_toolrefbutt.label:		Reference Point
+Msant*Grafik_tooldistbutt.label:	Distance
+Msant*Datei_loadbutt.label:		Load New
+Msant*Datei_savebutt.label:		Save
+Msant*Datei_saveasbutt.label:		Save New
+Msant*Berechn_segbutt.label:		Selection
+Msant*Berechn_segallbutt.label:		All
+Msant*Berechn_speisbutt.label:		Feed Segment
+Msant*Berechn_strombutt.label:		Boundary Potential
+Msant*Berechn_feldbutt.label:		Resonator Field
+Msant*Berechn_koppbutt.label:		Mutual Admittance
+Msant*Frequency.label:			Frequency
+Msant*Permittivity.label:		Permittivity
+Msant*Substrate Height.label:		Substrate Height
+
+! The following are not really necessary, since the
+! widgets are named accordingly
+!
+!Msant*X , Y.label:			X , Y
+!Msant*dX , dY.label:			dX , dY
+!
+!Msant*menu_drawingTools*New.label:		New
+!Msant*menu_drawingTools*Insert Points.label:	Insert Point
+!Msant*menu_drawingTools*Move Points.label:	Move Point
+!Msant*menu_drawingTools*Delete Points.label:	Delete Point
+!Msant*menu_drawingTools*Insert Polygon.label:	Insert Polygon
+!Msant*menu_drawingTools*Copy Polygon.label:	Copy Polygon
+!Msant*menu_drawingTools*Move Polygon.label:	Move Polygon
+!Msant*menu_drawingTools*Delete Polygon.label:	Delete Polygon
+!Msant*menu_drawingTools*Undelete.label:	Undelete
+!Msant*menu_drawingTools*Reference Point.label:	Reference Point
+!Msant*menu_drawingTools*Distance.label:	Distance
+!
+!Msant*File.label:			File
+!Msant*New.label:			New
+!Msant*Segmentation.label:		Segmentation
+!Msant*Number.label:			Number
+!Msant*Feed.label:			Feed
+!Msant*Radiation Coupling.label:	Coupling	
+!Msant*Analysis.label:			Analysis
+!Msant*Clone.label:			Clone
+!Msant*visible.label:			visible
+!Msant*Mutual Admittance.label:		Mutual Admittance	
+!Msant*Structure.label:			Structure
+!Msant*Points.label:			Points
+!Msant*Polygons.label:			Polygons
+!Msant*Radius.label:			Radius
+!Msant*Tools.label:			Tools
+!Msant*Raster.label:			Raster
+!Msant*Undelete Items.label:		Undelete Items
+!Msant*automatic.label:			automatic
+!
+!Msant*File.title:			File
+!Msant*Analysis.title:			Analysis
+!Msant*Drawing Tools.title:		Drawing Tools
+!Msant*Undelete-Buffer Size.title:	Undelete-Buffer Size
+!Msant*menu_undel*Undelete.label: 	Undelete
+!Msant*menu_undel*Buffer Size.label:	Buffer Size
+
+! include the english message strings here
+!
+#include "Messages.eng"

@@ -1,0 +1,26 @@
+#include "../Imake.opts"
+
+XCOMM math-library stuff
+
+FSOURCE =
+CSOURCE = 
+
+#ifndef HasGrips
+FSOURCE += gcontr.f
+CSOURCE += bitmod.c
+#endif
+
+#ifndef HasImsl
+FSOURCE += sgefs.f cgefs.f r1mach.f90.f
+#ifndef HasNRecipes
+FSOURCE += ode_derkf.f
+#endif
+#endif
+
+SRCS =  $(CSOURCE) $(FSOURCE)
+OBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.f=%.o)
+
+
+NormalLibraryTarget(nmath,$(OBJS))
+NormalFortranObjectRule()
+DependTarget()

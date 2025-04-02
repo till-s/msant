@@ -1,0 +1,43 @@
+#include "../Imake.opts"
+
+XCOMM
+XCOMM This defines a rule to make the message
+XCOMM header file 'msant_strings.h'
+XCOMM using the sed script 'sedscr'
+#define stringRule(name)  @@\
+STRN_H = name.h@@\
+STRN_C = name.c@@\
+includes:: $(STRN_H)@@\
+clean:: @@\
+	rm  -f $(STRN_H)@@\
+$(STRN_H):	$(STRN_C)@@\
+	rm  -f $(STRN_H)@@\
+	sed -f sedscr < $(STRN_C) >$(STRN_H)
+
+XCOMM  
+XCOMM This specifies, if the current calculation
+XCOMM is performed by direct matrix multiplication
+XCOMM or by an iterative method (not recommended, 
+XCOMM current implementation does not converge)
+XCOMM
+
+MULT_OR_ITER = -DDIREKT
+
+CSOURCE = CBstrom.c Malloc.c PBuffer.c basics.c calc.c feld.c fileop.c\
+	  graf.c intr.c lists.c msant_strings.c nahkop.c punkte.c\
+	  $(CREATEICONWIN) fixed_strings.c
+
+FSOURCE = 
+
+INCLUDES=-I.
+
+
+SRCS =  $(CSOURCE) $(FSOURCE)
+OBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.f=%.o)
+
+NormalLibraryTarget(msant,$(OBJS))
+NormalFortranObjectRule()
+stringRule(fixed_strings)
+SpecialObjectRule(CBstrom.o,,$(MULT_OR_ITER))
+SpecialObjectRule(bitmod.o,,-O4)
+DependTarget()

@@ -1,0 +1,3 @@
+CFLAGS=aber
+all:
+	@echo CFLAGS "$(CFLAGS)"

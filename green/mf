@@ -1,0 +1,11 @@
+FCFLAGS=-g -O4
+CFLAGS=-g -O4
+
+han: han.f  han.o
+	f77 $(FCFLAGS) -o han han.o han.f -L../nmath -lnmath -lamos
+
+han.o:	han.c
+	cc $(CFLAGS) -c han.c
+
+clean::
+	rm -f han.o han

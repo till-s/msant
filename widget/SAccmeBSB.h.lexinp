@@ -1,0 +1,106 @@
+/*
+ * $Id: SAccmeBSB.h.lexinp,v 1.3 1999/10/16 02:15:50 cvs Exp $
+ *
+Copyright (c) 1999, Till Straumann
+
+ */
+
+/*
+ * SAccmeBSB.h - Public Header file for SAccmeBSB object.
+ *
+ * This is the public header file for the Athena BSB SAccme object.
+ * It is intended to be used with the simple Acc menu widget.
+ * This subclass of smeBSB adds accelerator / accelerator_display
+ * functionality.
+ *
+ * Date:    october, 1999
+ *
+ * By:      Till Straumann
+ */
+
+#ifndef _SAccmeBSB_h
+#define _SAccmeBSB_h
+
+#ifdef XAW3D
+#include <X11/Xaw3d/SmeBSB.h>
+#else
+#include <X11/Xaw/SmeBSB.h>
+#endif
+
+/****************************************************************
+ *
+ * SAccmeBSB object
+ *
+ * NOTE that this object overloads the `notify' method. This object's
+ *		`notify()' is passed two arguments: the widget and an XEvent
+ *		which is propagated to the callbacks on the XtNcallback
+ *		list as the `call data' parameter.
+ *
+ ****************************************************************/
+
+/* BSB Menu Entry Resources:
+
+ Name		     		Class		    		RepType		       	Default Value
+ ----		     		-----		    		-------		       	-------------
+ accelerators    		Accelerators   			AcceleratorTable	NULL
+ doDisplayAccelerators	DoDisplayAccelerators	Boolean				True	whether to show the installed accelerators.
+ accDisplaySpace		AccDisplaySpace			Dimension			0		how much space to reserve for accelerator
+																			display. Automatically set by
+																			Xaw3dInstallAllSmnuAccelerators().
+ accDisplaySep			AccDisplaySep			Dimension			4		separating space.
+ noneDisplay			AcceleratorDisplay		String				"!-"	how to display the None modifier
+ shiftDisplay			AcceleratorDisplay		String				"s-"	how to display the Shift modifier
+ ctrlDisplay			AcceleratorDisplay		String				"c-"	how to display the Ctrl modifier
+ lockDisplay			AcceleratorDisplay		String				"l-"	how to display the Lock modifier
+ mod1Display			AcceleratorDisplay		String				"m1-"	how to display the Mod1 modifier
+ mod2Display			AcceleratorDisplay		String				"m2-"	how to display the Mod1 modifier
+ mod3Display			AcceleratorDisplay		String				"m3-"	how to display the Mod1 modifier
+ mod4Display			AcceleratorDisplay		String				"m4-"	how to display the Mod1 modifier
+ mod5Display			AcceleratorDisplay		String				"m5-"	how to display the Mod1 modifier
+ metaDisplay			AcceleratorDisplay		String				"m-"	how to display the Meta modifier
+ altDisplay				AcceleratorDisplay		String				"a-"	how to display the Alt modifier
+ hyperDisplay			AcceleratorDisplay		String				"h-"	how to display the Hyper modifier
+ superDisplay			AcceleratorDisplay		String				"su-"	how to display the Super modifier
+ displayFormat			DisplayFormat			String				"(%m%s)" how to format the display string.
+																			 %m is substituted by the concatenated
+																			 modifier strings, %s by the Keysym.
+ accDisplayJustify		AccDisplayJustify		Justify				JustifyLeft how to justify the accelerator display.
+*/
+
+typedef struct _SAccmeBSBClassRec    *SAccmeBSBObjectClass;
+typedef struct _SAccmeBSBRec         *SAccmeBSBObject;
+
+##DOSCAN##XtNnoneDisplay
+##DOSCAN##XtNshiftDisplay
+##DOSCAN##XtNctrlDisplay
+##DOSCAN##XtNlockDisplay
+##DOSCAN##XtNmod1Display
+##DOSCAN##XtNmod2Display
+##DOSCAN##XtNmod3Display
+##DOSCAN##XtNmod4Display
+##DOSCAN##XtNmod5Display
+##DOSCAN##XtNbtn1Display
+##DOSCAN##XtNbtn2Display
+##DOSCAN##XtNbtn3Display
+##DOSCAN##XtNbtn4Display
+##DOSCAN##XtNbtn5Display
+##DOSCAN##XtNmetaDisplay
+##DOSCAN##XtNaltDisplay
+##DOSCAN##XtNhyperDisplay
+##DOSCAN##XtNsuperDisplay
+##DOSCAN##XtNdisplayFormat
+##DOSCAN##XtNdoDisplayAccelerators
+##DOSCAN##XtNaccDisplaySpace
+##DOSCAN##XtNaccDisplaySep
+##DOSCAN##XtNaccDisplayJustify
+
+##DOSCAN##XtCDoDisplayAccelerators
+##DOSCAN##XtCAccDisplaySpace
+##DOSCAN##XtCAccDisplaySep
+##DOSCAN##XtCAcceleratorDisplay
+##DOSCAN##XtCDisplayFormat
+##DOSCAN##XtCAccDisplayJustify
+
+extern WidgetClass sAccmeBSBObjectClass;
+
+#endif /* _SAccmeBSB_h */

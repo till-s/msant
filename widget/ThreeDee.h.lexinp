@@ -1,0 +1,67 @@
+/*
+ * $Id: ThreeDee.h.lexinp,v 1.1 1999/10/18 22:37:57 cvs Exp $
+ *
+ *  The ThreeDee Widget
+ *  -------------------
+ *
+ *  simple widget with shadows, added a resource to control embossing.
+ 
+ *  Copyright (C) 1997  by Till Straumann   <strauman@sun6hft.ee.tu-berlin.de>
+
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Library Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Library Public License for more details.
+
+ *  You should have received a copy of the GNU General Library Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *  $Log: ThreeDee.h.lexinp,v $
+ *  Revision 1.1  1999/10/18 22:37:57  cvs
+ *   - Imakefile supports building a (static) library now.
+ *   - all (resource etc.) strings go to strDefs.c if SEPARATE_STRINGS is defined.
+ *
+ *  Revision 1.2  1998/04/23 21:51:12  till
+ *  type fixed
+ *
+ *  Revision 1.1  1998/04/23 20:28:03  till
+ *  put under cvs control
+ *
+
+ */
+#ifndef _XawThreeDee_h
+#define _XawThreeDee_h
+
+/***********************************************************************
+ *
+ * ThreeDee Widget
+ *
+ ***********************************************************************/
+
+#include <X11/Xaw3d/ThreeD.h>
+
+/* Parameters:
+
+ Name                 Class              RepType         Default Value
+ ----                 -----              -------         -------------
+ emboss	              Emboss             Boolean	 True
+
+*/
+
+##DOSCAN##XtNemboss
+##DOSCAN##XtCEmboss
+
+typedef struct _ThreeDeeRec *ThreeDeeWidget;
+typedef struct _ThreeDeeClassRec *ThreeDeeWidgetClass;
+
+extern WidgetClass threeDeeWidgetClass;
+
+void ThreeDeeCallback(/*Widget threeDee, XtPointer call_data*/);
+
+#endif /* _XawThreeDee_h */

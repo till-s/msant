@@ -1,0 +1,74 @@
+Msant.messages:Maximal eine Kante selektieren!\002\
+Stift Positionieren!\002\
+Punkte zeichnen\002\
+nichts selektiert!\002\
+Klon: dx=%g dy=%g\002\
+Ungültiger Radius!\002\
+1. Punkt selektieren\002\
+2. Punkt selektieren\002\
+Verschiebung: Basis?\002\
+Klon: Basis?\002\
+Wiedereinfügen nicht möglich!\002\
+Datei '%s' kann nicht erstellt werden!\002\
+noname.geo\002\
+Datei nicht gefunden!\002\
+Datei: Version %u; %u erwartet!\002\
+Keine Datei geladen!\002\
+Referenzpunkt setzen\002\
+Testversion: %u\002\
+dx=%g dy=%g\002\
+%g %cj %g Volt\002\
+Verschieben!\002\
+Kopie positionieren!\002\
+Klon positionieren!\002\
+Aktuelles File nicht gesichert!\002\
+Sichern\002\
+Abbrechen\002\
+Trotzdem Ende\002\
+Ja\002\
+Nein\002\
+Ignorieren\002\
+Weiter\002\
+Berechnungen gehen verloren!\002\
+Geometrie wurde modifiziert; speichern?\002\
+Datei existiert schon; neu schreiben?\002\
+Kein Speisepunkt!\002\
+Substratdicke = 0!\002\
+Berechnung ohne Kopplung\002\
+Frequenz <= 0.!\002\
+Epsilon < 1.!\002\
+Nur der speisende Stift wird berücksichtigt!\002\
+Diese Meldung nicht mehr anzeigen\002\
+Kante %d nicht segmentiert!\002\
+Kante %d: Substratdicke > Segmentlänge!\002\
+%s: Zu wenig Speicher!\002\
+Koppelmatrizen (Dim: %i)\002\
+Struktur zu gross\002\
+Matrixmultiplikation\002\
+Elimination\002\
+Speisestrom 1A, |Maximum|: %g V, \002\
+Impedanz am Speisetor: %g %cj %g \002\
+(Admittanz: %g %cj %g)\002\
+Erst Randpotential berechnen!\002\
+Strukturen überlappen sich!\002\
+Koppeladmittanz...\002\
+Speisestelle anclicken\002\
+Feldberechnung...\002\
+Feld zeichnen...\002\
+Berechnung...\002\
+Abbrechen\002\
+PunkteLesen: Polygonliste nicht leer!\002\
+Action %s: ungültige Parameter\002\
+%.4g\002\
+Action %s: ungültiges Event\002\
+Hellau\002\
+%s: falsche Dimension\002\
+%s: falsche Parameter\002\
+%s: singuläre Matrix\002\
+%s: Matrix schlecht konditioniert\002\
+%s: Unbekannter Fehler\002\
+CGEFS\002\
+SGEFS\002\
+Sehr tiefe Frequenz; löse statisches Problem\002\
+Betrag der Randspannung gezeichnet;\002\
+Ladungsdichte am Rand

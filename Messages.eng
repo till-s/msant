@@ -1,0 +1,74 @@
+Msant.messages:Select only one line / point\002\
+Place the feed\002\
+Draw points\002\
+Nothing selected\002\
+Clone: dx=%g dy=%g\002\
+Invalid radius\002\
+Select 1st point\002\
+Select 2nd point\002\
+Move: base point ?\002\
+Clone:base point ?\002\
+Undelete not possible\002\
+File '%s' can not be created\002\
+noname.geo\002\
+File not found\002\
+File: version %u; %u expected\002\
+No file loaded\002\
+Place reference point\002\
+Beta version: %u\002\
+dx=%g dy=%g\002\
+%g %cj %g volts\002\
+Move\002\
+Place copy\002\
+Place clone\002\
+File is not saved\002\
+Save\002\
+Cancel\002\
+Discard\002\
+Yes\002\
+No\002\
+Ignore\002\
+Continue\002\
+Results of analysis will be lost\002\
+Geometry was modified; save it ?\002\
+File exists; overwrite ?\002\
+No feed segment\002\
+Substrate height = 0\002\
+Analysis neglecting radiation coupling\002\
+Frequency <= 0.\002\
+Permittivity < 1.\002\
+Other feeds than the selected one are ignored\002\
+Don't show this message anymore\002\
+Border el. %d not segmented\002\
+Border el. %d: substrate height > segment length\002\
+%s: no memory\002\
+Filling coupling matrices (dim: %i)\002\
+Geometry too big\002\
+Matrix multiplication\002\
+Equation solving\002\
+Feed current = 1A, contour voltage |Max|: %g volts, \002\
+Feed impedance: %g %cj %g \002\
+(admittance: %g %cj %g)\002\
+Solve for boundary values first\002\
+Structures overlap\002\
+Mutual admittance...\002\
+Select feed segment\002\
+Calculating resonator field...\002\
+Drawing resonator field...\002\
+Calculating...\002\
+Abort\002\
+routine PunkteLesen(): list of polygons not empty\002\
+Action %s: invalid parameters\002\
+%.4g\002\
+Action %s: invalid event\002\
+Hellau\002\
+%s: wrong dimension\002\
+%s: invalid parameters\002\
+%s: singular matrix\002\
+%s: matrix ill conditioned\002\
+%s: unknown error\002\
+CGEFS\002\
+SGEFS\002\
+Very low frequency; solving electrostatic problem\002\
+Modulus of contour voltage shown;\002\
+Charge density along boundary;

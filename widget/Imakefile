@@ -1,0 +1,95 @@
+/*
+ $Id: Imakefile,v 1.18 2001/03/05 08:35:17 cvs Exp $
+ (c) Till Straumann 1998
+ */
+
+#        DEFINES = $(IEEE_DEFS) $(SIGNAL_DEFINES)
+#         DEPLIBS = XawClientDepLibs
+#  LOCAL_LIBRARIES = IconLibs XawClientLibs
+#  SYS_LIBRARIES = -lm 
+#     CCOPTIONS = -Wall -Wno-parentheses -m486
+
+#define DoNormalLib YES
+#define DoSharedLib NO
+#define DoDebugLib  NO
+#define DoProfileLib NO
+#define HasSharedData YES
+#undef  InstallLibManPages 
+#define InstallBinManPages NO
+#define InstallLibManPages NO
+#define InstallMiscManPages NO
+#define LibName		tillwid
+#define SoRev		1.0
+
+#undef ProgramTargetHelper
+#define ProgramTargetHelper ProgramTargetHelperNoMan
+
+#include "Imakedefs"
+
+SCAN_STRINGS = scan_strings
+STR_PREFIX = $(LIBNAME)
+DEFINES += -DSEPARATE_STRINGS $(XAWDEFINES)
+EXTRA_INCLUDES += $(XAWINCDIR)
+
+EXTRALIBRARYDEPS=XawClientDepLibs
+
+#if SharedDataSeparation
+UNSHAREDOBJS = sharedlib.o strdefs.o
+#endif
+OBJS2 += release.o strdefs.o
+
+NormalLibraryTarget($(LIBNAME),$(OBJS2))
+
+#if DoSharedLib && SharedDataSeparation
+SpecialCObjectRule(sharedlib.o,NullParameter,$(SHLIBDEF))
+#endif
+
+#ifdef DoMakeScanStrings
+
+OBJS1 = scan_strings.o
+SRCS1 = scan_strings.c
+
+
+PROGRAMS = scan_strings
+
+ComplexProgramTarget_1(scan_strings,LexLib,)
+
+LexFile(scan_strings)
+
+#endif
+
+RELEASE = $(shell awk 'BEGIN{FS="[ $$]+"}/Name:/{ if ( $$(NF-1) != "NONE" && $$(NF-1) != "Name:" ) print $$(NF-1) }' release.c)
+
+$(INCLUDE_TEMPLATES:%.lexinp=%): $(INCLUDE_TEMPLATES)
+	$(SCAN_STRINGS) $(STR_PREFIX) $^
+
+includes:: $(INCLUDE_TEMPLATES:%.lexinp=%)
+
+release.c:: $(INCLUDE_TEMPLATES)
+
+strdefs.c: $(INCLUDE_TEMPLATES:%.lexinp=%)
+	@$(RM) $@
+	@echo '/* THIS FILE WAS AUTOMATICALLY GENERATED; DO NOT EDIT */' >$@
+	@echo '#include "$(STR_PREFIX)_res_c"'>>$@
+	@echo '#include "$(STR_PREFIX)_class_c"'>>$@
+	@echo '#include "$(STR_PREFIX)_type_c"'>>$@
+
+release.c:: $(SRCS1) $(SRCS2)
+	@echo "run cvs commit before compiling release.c"
+	@echo "/*`date`*/"'char *tillWidgetsRevisionName = "$$I''d: uncommitted version of '`date`'$$";' >$@
+	@echo 'char *tillWidgetsRelease = "$$Na''me: NONE $$";' >>$@
+
+clean::
+	$(RM) strdefs.c release.c
+
+#ifdef DoMakeScanStrings
+includes:: scan_strings
+#endif
+
+DependTarget3($(SRCS2),,)
+
+includes:: strdefs.c
+
+allclean:: clean
+	$(RM) $(INCLUDE_TEMPLATES:%.lexinp=%)
+	$(RM) $(STR_PREFIX)_res_c $(STR_PREFIX)_class_c $(STR_PREFIX)_type_c

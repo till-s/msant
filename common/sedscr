@@ -1,0 +1,11 @@
+1 i\
+#ifndef _fixed_strings_h_\
+\#define _fixed_strings_h_\
+/* This is automatically created by "make";\
+ * do not edit.\
+ */
+$a\
+#endif
+/^char/!D
+s/^char/extern &/
+s/=.*$/;/

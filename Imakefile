@@ -1,0 +1,74 @@
+#include "Imake.opts"
+
+#ifdef HasXTutil
+CREATEICONWIN =
+#else
+CREATEICONWIN = CrtIcWin.c
+#endif
+
+ LOCAL_LIBRARIES =
+#ifdef HasXTutil
+ LOCAL_LIBRARIES += -lXTutil
+#endif
+#ifdef HasXpm
+ LOCAL_LIBRARIES = -lXpm
+#endif
+
+#        DEFINES = $(IEEE_DEFS) $(SIGNAL_DEFINES)
+
+ LOCAL_LDFLAGS = -Lwidget -Lcommon -Lnmath -Lgreen
+ LOCAL_LIBRARIES += -lwids -lmsant -lgreen XawClientLibs 
+
+NMATHLIB = 
+
+#ifndef HasGrips
+NMATHLIB += libnmath.a
+LOCAL_LIBRARIES += -lnmath
+#else
+#ifndef HasImsl
+NMATHLIB += libnmath.a
+LOCAL_LIBRARIES += -lnmath
+#endif
+#endif
+
+DEPLIBS = XawClientDepLibs libwids.a libmsant.a $(NMATHLIB) libgreen.a
+
+  SYS_LIBRARIES = -lm
+
+#ifdef HasImsl
+  SYS_LIBRARIES += -lmath
+#endif
+
+EXTRA_DEFINES += -DUSE_FOCUSFORM
+
+
+SUBDIRS		 = widget common nmath green
+
+
+	
+
+           SRCS = msant.c haupt_ui.c widglist.c pix.c grafik_ui.c pinpop.c\
+		  datei_ui.c calc_ui.c inout.c popup.c pan.c pmstuff.c
+
+	    OBJS =  $(SRCS:%.c=%.o)
+
+	INCLUDES = -Icommon 
+     EXTRA_INCLUDES = $(XPMINCLUDEPATH)
+
+#define PassCDebugFlags 'CCOPTIONS=$(CCOPTIONS)'\
+			'CDEBUGFLAGS=$(CDEBUGFLAGS)'\
+			'EXTRA_DEFINES=$(EXTRA_DEFINES)'\
+			'FCFLAGS=$(FCFLAGS)'\
+			'EXTRA_INCLUDES=$(EXTRA_INCLUDES)'\
+			'CREATEICONWIN=$(CREATEICONWIN)'
+all:: $(DEPLIBS)
+debug:: all
+ComplexProgramTargetNoMan(msant)
+NamedMakeSubdirs(libwids.a,widget)
+NamedMakeSubdirs(libmsant.a,common)
+NamedMakeSubdirs(libnmath.a,nmath)
+NamedMakeSubdirs(libgreen.a,green)
+MakefileSubdirs($(SUBDIRS))
+IncludesSubdirs($(SUBDIRS))
+DependSubdirs($(SUBDIRS))
+CleanSubdirs($(SUBDIRS))

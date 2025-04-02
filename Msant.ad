@@ -1,0 +1,371 @@
+!
+Msant.canvasWidth: 1000
+Msant.canvasHeight: 1000
+
+Msant*TextField.length:48
+
+!!!!!!!!!!!!!!!!!
+!
+! These can be used to bind user def. actions
+!
+!!!!!!!!!!!!!!!!!
+!Msant*Haupt_button1.label:		Unused1
+!Msant*Haupt_button2.label:		Unused2
+
+
+!!!!!!!!!!!!!!!!!!!!
+!
+! Default Eingabewerte
+! Below here are the default settings
+!
+!!!!!!!!!!!!!!!!!!!!
+
+!!!!!!!!!!!!!!!!!
+!   Mit/Ohne Kopplung
+!   radiation coupling on/off
+
+Msant*Berechn_koppflag_mit.state:  		True
+
+!   Klon sichtbar/unsichtbar
+!   clone visible
+Msant*Berechn_koppdist_set_sichtbar.state: 	True
+
+!
+!   ref. point follows automatically
+!Msant*Grafik_refp_set_automatisch.state:	True
+
+
+!!!!!!!!!!!!!!!!! Dateifenster
+! Dateiname
+! Filename
+Msant*Datei_dateiname.string: 	~/contint/grafik/refant
+
+!!!!!!!!!!!!!!!!! Hauptfenster
+! Frequenz
+! frequency
+Msant*Haupt_freq.string:		1.E8
+! Dielektrizitaetszahl
+! permittivity
+Msant*Haupt_epsi.string:		2.3
+! Substratdicke
+! substrate height
+Msant*Haupt_hsubst.string:		0.
+
+!!!!!!!!!!!!!!!!! Zeichenfenster
+! Stiftradius
+! nicht vorgeben!
+! 
+! don't specify the radius of the feed
+!
+! Raster
+Msant*Grafik_raster.string:		0.05
+
+!!!!!!!!!!!!!!!!! Einstellungen
+! Wiedereinf"ugen: Puffergr"osse
+! undel buffer size (items)
+Msant*Einst1_undelbufsiz.string:	30
+
+!!!!!!!!!!!!!!!!! Analysefenster
+! Segmentzahl
+! nr. of segments
+Msant*Berechn_nsegs.string:		20
+!
+
+!!!!!!!!!!!!
+! Schriften
+! Fonts
+!!!!!!!!!!!!
+!
+Msant*font:			lucidasans-12
+Msant*Label.font:		lucidasans-bold-12
+Msant*Berechn_message4.font: 	lucidasans-12
+Msant*Datei_outpfn.font:	lucidasans-12
+Msant*Haupt_outpx.font:		lucidasans-12
+Msant*Haupt_outpy.font:		lucidasans-12
+Msant*Haupt_outpdx.font:	lucidasans-12
+Msant*Haupt_outpdy.font:	lucidasans-12
+Msant*Haupt_outpm.font:		lucidasans-12
+Msant*Berechn_koppvek.font:	lucidasans-12
+Msant*Berechn_koppy.font:	lucidasans-12
+!
+!
+
+!!!!!!!!
+! Farben
+! Colours
+!!!!!!!!
+!
+!
+! wenn fontColor unspezifiziert, wird
+! das 'Komplement' von Background gew"ahlt
+!
+! The background of the graphics windows
+Msant*Haupt_grafikfenster.background:white
+Msant*Haupt_stromfenster.background:white
+Msant*background:				grey80
+Msant*Haupt_outpm.insensitiveForeground:	red
+Msant*Datei_outpfn.insensitiveForeground:	red
+Msant*Berechn_koppvek.insensitiveForeground:	red
+Msant*Berechn_koppy.insensitiveForeground:	red
+! The colour of the structure
+Msant.foreground:				green
+! The colour of the coordinates
+Msant.coordColour:				grey80
+! And the contourlines
+Msant.fieldColour:				blue
+! 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+! INCLUDE THE LABEL DEFS HERE
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! German labels for MSANT (Athena Version)
+! Include these into Resource File
+!
+
+#include "Labels.eng"
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!
+!  Translations; hier werden Actions an
+!  Events gebunden.
+!
+!  Die wichtigsten Actions mit Parametern
+!  sind:
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!    MovePointer([cmd [arg] [arg]])
+!
+!  F"ahrt den Grafikcursor an die angegebene Stelle
+!  
+!<cmd>: fehlt		Falls im Zeichenfenster --> Ort des Event
+!	X,Y,XD,YD 	1 Argument --> angegebene X,Y Koordinate
+!		    	bezgl. Ursprung bzw. Referenzpunkt (XD,YD).
+!		    	Die andere Koordinate bleibt unver"andert.
+!       P,PD		2 Argumente --> zum angegebenen Ort (X,Y)
+!			bezgl. Ursprung bzw. Referenzpunkt.
+!			Bsp: MovePointer(PD,0,0) --> Referenzpunkt
+!       U,D,L,R		1 Argument --> vom momentanen Ort um die an-
+!			gegebene Distanz nach Oben, Unten, Links oder
+!			Rechts. Wenn die Distanz negativ eingegeben wird,
+!			versteht sie sich in Raster-Einheiten (aus dem
+!			Grafikmen"u).
+!	 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!   EndMode(cmd [opt]])
+!
+!  Die einzig M"ogliche Aktion, wenn zuvor ein Modus aktiviert wurde
+!  (z.B. 'Punkte zeichnen')
+!<cmd>: C		Fortsetzung im aktuellen Mode (zB. weitere
+!			Punkte zeichnen). Beenden, falls keine Fortsetzung
+!			m"oglich.
+!	C,C		Fortsetzung, aber die letzte Teiloperation r"uck-
+!			g"angig machen (z.B. letzten gezeichneten Punkt 
+!			wieder entfernen)
+!	A		aktuellen Mode beenden, bzw. abbrechen.
+!			Im Beispiel: keine weiteren Punkte mehr zeichnen;
+!			die bereits gezeichneten bleiben erhalten.
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!  ModePolygon(cmd)
+!
+!  angew"ahlte Polygone verschieben (cmd==M), l"oschen (cmd==D) oder
+!  kopieren (cmd==C).
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!  ModeAddPolygon([cmd])
+!
+!  Polygone einf"ugen. Wenn cmd==S wird ein Speisestift eingef"ugt. Dies
+!  geht nur, wenn das Eingabefeld f"ur den Radius sichtbar und mit einem
+!  g"ultigen Wert versorgt ist (Grafikmen"u).
+!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!  StartCalculation(cmd)
+! 
+!  Berechnung des Randpotentials (cmd==B), Innenfeldes (cmd==I) oder
+!  der Koppeladmittanz (cmd==C) starten.
+!
+
+Msant*Haupt_outpx*translations: #override\n\
+Shift	<Key>Return:	EndMode(Continue,CancelLast)\n\
+    <Key>Return:	EndMode(Continue)\n\
+    <Key>Escape:	EndMode(Ack)
+!Msant*Haupt_outpy*translations: #override\n\
+!Shift	<Key>Return:	Validate() EndMode(C,C)\n\
+!	<Key>Return:	Validate() EndMode(C)\n\
+!	<Key>Escape:	Validate() EndMode(A)
+Msant*Haupt_outpdx*translations: #override\n\
+Shift	<Key>Return:	EndMode(C,C)\n\
+    <Key>Return:	EndMode(C)\n\
+    <Key>Escape:	EndMode(A)
+Msant*Haupt_outpdy*translations: #override\n\
+Shift	<Key>Return:	EndMode(C,C)\n\
+    <Key>Return:	EndMode(C)\n\
+    <Key>Escape:	EndMode(A)
+
+Msant*Berechn_segbutt.translations: #override\n\
+    <Btn1Up>:	Discretize()
+Msant*Berechn_segallbutt.translations: #override\n\
+    <Btn1Up>:	DiscretizeAll()
+Msant*Berechn_speisbutt.translations: #override\n\
+    <Btn1Up>:	SetFeedpoint()
+Msant*Berechn_strombutt.translations: #override\n\
+    <Btn1Up>:	StartCalculation(BoundaryValues)
+Msant*Berechn_feldbutt.translations: #override\n\
+    <Btn1Up>:	StartCalculation(InnerField)
+Msant*Berechn_koppbutt.translations: #override\n\
+    <Btn1Up>:	StartCalculation(Coupling)
+Msant*Berechn_koppdistbutt.translations: #override\n\
+    <Btn1Up>:	ModeCloneVector()
+
+
+Msant*Datei_loadbutt.translations: #override\n\
+    <Btn1Up>:	LoadFile()
+Msant*Datei_savebutt.translations: #override\n\
+    <Btn1Up>:	SaveFile()
+Msant*Datei_saveasbutt.translations: #override\n\
+    <Btn1Up>:	SaveAs()
+Msant*Grafik_menu1_Wiedereinfgen.translations: #override\n\
+    <BtnUp>:	Undelete()
+Msant*Datei_dateiname.translations: #override\n\
+Any <Key>Return:LoadFile()
+
+Msant*Haupt_grafikfenster.translations: #override\n\
+Ctrl   <Motion>:\n\
+Ctrl   <Leave>:\n\
+    <Leave>:	MovePointer()\n\
+    <Motion>:	MovePointer()\n\
+    <Key> O :	MovePointer(P,0,0)\n\
+    <Key> R :	MovePointer(PD,0,0)\n\
+    <Key>Up :	MovePointer(U,-1)\n\
+    <Key>Down:	MovePointer(D,-1)\n\
+    <Key>Left:	MovePointer(L,-1)\n\
+    <Key>Right:	MovePointer(R,-1)\n\
+    <Key>Return:	EndMode(C)\n\
+    <Key>Escape:	EndMode(A)\n\
+Shift	<Btn1Down>:	EndMode(C,C)\n\
+    <Btn1Down>:	EndMode(C)\n\
+    <Btn2Down>:	EndMode(A)\n\
+    <Btn3Down>:     XawPositionSimpleMenu("menu_drawingTools") MenuPopup("menu_drawingTools")
+
+Msant*Haupt_quitbutt.translations: #override\n\
+    <Btn1Up>:	Quit()
+
+Msant*Grafik_newstructbutt.translations: #override\n\
+    <Btn1Up>:	ModeNew()
+Msant*Grafik_inspointbutt.translations: #override\n\
+    <Btn1Up>:	ModeInsertPoint()
+Msant*Grafik_movepointbutt.translations: #override\n\
+    <Btn1Up>:	ModeMovePoint()
+Msant*Grafik_delpointbutt.translations: #override\n\
+    <Btn1Up>:	ModeDeletePoint()
+Msant*Grafik_addpolbutt.translations: #override\n\
+    <Btn1Up>:	ModeAddPolygon()
+Msant*Grafik_copypolbutt.translations: #override\n\
+    <Btn1Up>:	ModePolygon(Copy)
+Msant*Grafik_movepolbutt.translations: #override\n\
+    <Btn1Up>:	ModePolygon(Move)
+Msant*Grafik_delpolbutt.translations: #override\n\
+    <Btn1Up>:	ModePolygon(Delete)
+Msant*Grafik_insstiftbutt.translations: #override\n\
+    <Btn1Up>:	ModeAddPolygon(Stift)
+Msant*Grafik_undelbutt.translations: #override\n\
+    <Btn1Up>:	Undelete()
+Msant*Grafik_toolrefbutt.translations: #override\n\
+    <Btn1Up>:	ModeRefPoint()
+Msant*Grafik_tooldistbutt.translations: #override\n\
+    <Btn1Up>:	ModeDistance()
+
+
+!!!!!!!!
+!
+! LAYOUT  you better don't change
+!
+!!!!!!!!
+Msant*Label.borderWidth:0
+Msant*Label.shadowWidth:0
+Msant*Haupt_outpm.vertDistance:20
+Msant*Haupt_outpversion.vertDistance:20
+Msant*Haupt_outpversion.justify:Right
+Msant*Haupt_outpm.justify:Right
+Msant*TextField.width: 120
+Msant*internalHeight:3
+Msant*Haupt_stromfenster.width:1000
+Msant*Haupt_stromfenster.height:350
+Msant*vp_grafik.width:500
+Msant*vp_grafik.height:500
+Msant*vp_strom.height:200
+
+Msant*File*Label.justify:Left
+Msant*File*Command.vertDistance:30
+Msant*File*New.vertDistance:30
+Msant*File*Datei_dateiname.vertDistance:30
+
+!!!!!!!!!!!!!!!!!!!!
+!
+! DONT CHANGE NOTHING BELOW THIS
+!
+!!!!!!!!!!!!!!!!!!!!
+Msant.resourcesFound:True
+
+!!!!!!!!!!!!!!!!!
+!
+! Focus stuff
+!
+!!!!!!!!!!!!!!!!!!!
+Msant*TextField.focusInterest:True
+Msant*vp_grafik*focusInterest:True
+Msant*vp_grafik*focusInterest:True
+
+!Important for the right behavior of 'focus form'
+
+Msant*vp_grafik.translations:#override\n\
+	<Enter>: FocusSet()\n\
+	<BtnUp>: FocusSet()\n
+
+Msant*ffw_r*TextField.translations:#override\n\
+Shift	<Key>Tab:FocusTraverse(b)\n\
+    	<Key>Tab:FocusTraverse()\n\
+Shift	<Key>Return:Validate()EndMode(C,C)\n\
+    	<Key>Return:Validate()EndMode(C)\n\
+    	<FocusIn>:CursorState(a)\n\
+    	<FocusOut>:CursorState(i)\n\
+    	<Enter>:\n\
+    	<Leave>:\n\
+    	<Btn1Up>:FocusSet()\
+	     MoveCursor()\
+	     HighlightExtend()\
+	     MakeSelection(PRIMARY)
+
+Msant*ffw_dr*TextField.translations:#override\n\
+Shift	<Key>Tab:FocusTraverse(b)\n\
+    	<Key>Tab:FocusTraverse()\n\
+Shift	<Key>Return:Validate()EndMode(C,C)\n\
+    	<Key>Return:Validate()EndMode(C)\n\
+    	<FocusIn>:CursorState(a)\n\
+    	<FocusOut>:CursorState(i)\n\
+    	<Enter>:\n\
+    	<Leave>:\n\
+    	<Btn1Up>:FocusSet()\
+	     MoveCursor()\
+	     HighlightExtend()\
+	     MakeSelection(PRIMARY)
+
+Msant*TextField.translations:#override\n\
+Shift	<Key>Tab:FocusTraverse(b)\n\
+    <Key>Tab:FocusTraverse()\n\
+    <FocusIn>:CursorState(a)\n\
+    <FocusOut>:CursorState(i)\n\
+    <Enter>:\n\
+    <Leave>:\n\
+    <Btn1Up>:FocusSet()\
+	     MoveCursor()\
+	     HighlightExtend()\
+	     MakeSelection(PRIMARY)
+

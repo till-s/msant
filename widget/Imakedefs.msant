@@ -1,0 +1,19 @@
+/*
+ * definitions of the widgets files needed for the `xfm' application
+ *
+ * define XAWINCDIR and XAWDEFINES if this is not done in any parent dir
+ *
+ * e.g.
+ */
+
+XAWINCDIR=-I/usr/X11R6/include/X11/Xaw3d
+XAWDEFINES=-DXAW3D
+
+#define DoMakeScanStrings
+
+LIBNAME = wids
+INCLUDE_TEMPLATES = TextField.h.lexinp ThreeDee.h.lexinp FocusForm.h.lexinp
+HEADERS = TextFieldP.h ThreeDeeP.h FocusFormP.h $(INCLUDE_TEMPLATES:%.lexinp=%)
+HEADERS += Canvas.h CanvasP.h PmPanner.h PmPannerP.h SlPaned.h SlPanedP.h
+SRCS2 = $(INCLUDE_TEMPLATES:%.h.lexinp=%.c) Canvas.c PmPanner.c SlPaned.c
+OBJS2 = $(SRCS2:%.c=%.o)

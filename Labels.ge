@@ -1,0 +1,85 @@
+! German labels for MSANT (Athena Version)
+! Include these into Resource File
+!
+
+Msant*menu_drawingTools.label:		Zeichenhilfe
+
+Msant*Berechn_koppvek.label:		Translation
+Msant*Berechn_koppy.label:		Koppeladmittanz
+Msant*Haupt_grafbutt.label:		Zeichnen
+Msant*Haupt_dateibutt.label:		Datei
+Msant*Haupt_calcbutt.label:		Analyse
+Msant*Haupt_button1.label:		Unbelegt 1
+Msant*Haupt_button2.label:		Unbelegt 2
+Msant*Haupt_quitbutt.label:		Ende
+Msant*Grafik_newstructbutt.label:	Neue Struktur
+Msant*Berechn_koppdistbutt.label:	Translationsvektor
+Msant*Grafik_inspointbutt.label:	Punkte einfügen
+Msant*Grafik_movepointbutt.label:	Punkte verschieben
+Msant*Grafik_delpointbutt.label:	Punkte löschen
+Msant*Grafik_addpolbutt.label:		Polygone einfügen
+Msant*Grafik_copypolbutt.label:		Polygone kopieren
+Msant*Grafik_movepolbutt.label:		Polygone verschieben
+Msant*Grafik_delpolbutt.label:		Polygone löschen
+Msant*Grafik_insstiftbutt.label:	Speisestift
+Msant*Grafik_undelbutt.label:		Wiedereinfügen
+Msant*Grafik_toolrefbutt.label:		Bezugspunkt
+Msant*Grafik_tooldistbutt.label:	Abstand
+Msant*Datei_loadbutt.label:		Neue Datei laden
+Msant*Datei_savebutt.label:		Sichern
+Msant*Datei_saveasbutt.label:		Neue Datei speichern
+Msant*Berechn_segbutt.label:		Selektion
+Msant*Berechn_segallbutt.label:		Alles
+Msant*Berechn_speisbutt.label:		Speisesegment
+Msant*Berechn_strombutt.label:		Randpotential
+Msant*Berechn_feldbutt.label:		Resonatorfeld
+Msant*Berechn_koppbutt.label:		Koppeladmittanz
+Msant*Frequency.label:			Frequenz
+Msant*Permittivity.label:		Dielektrizitätszahl
+Msant*Substrate Height.label:		Substrathöhe
+!Msant*X , Y.label:			X , Y
+!Msant*dX , dY.label:			dX , dY
+
+Msant*menu_drawingTools*New.label:		Neue Struktur
+Msant*menu_drawingTools*Insert Points.label:	Punkte einfügen
+Msant*menu_drawingTools*Move Points.label:	Punkte verschieben
+Msant*menu_drawingTools*Delete Points.label:	Punkte löschen
+Msant*menu_drawingTools*Insert Polygon.label:	Polygone einfügen
+Msant*menu_drawingTools*Copy Polygon.label:	Polygone kopiere
+Msant*menu_drawingTools*Move Polygon.label:	Polygone verschieben
+Msant*menu_drawingTools*Delete Polygon.label:	Polygone löschen
+Msant*menu_drawingTools*Undelete.label:		Wiedereinfügen
+Msant*menu_drawingTools*Reference Point.label:	Bezugspunkt
+Msant*menu_drawingTools*Distance.label:		Abstand
+
+Msant*File*File.label:				Datei
+Msant*File*New.label:				Neue Datei
+Msant*Analysis*Segmentation.label:		Segmentieren
+Msant*Analysis*Number.label:			Anzahl
+Msant*Analysis*Feed.label:			Speisepunkt
+Msant*Analysis*Radiation Coupling.label:	Strahlungskopplung
+Msant*Analysis*Analysis.label:			Analyse
+Msant*Analysis*Clone.label:			Gekoppelter Klon
+Msant*Analysis*visible.label:			sichtbar
+Msant*Analysis*Mutual Admittance.label:		Koppeladmittanz
+Msant*Drawing Tools*Structure.label:		Struktur
+Msant*Drawing Tools*Points.label:		Punkte
+Msant*Drawing Tools*Polygons.label:		Polygone
+Msant*Drawing Tools*Radius.label:		Radius
+Msant*Drawing Tools*Tools.label:		Hilfsmittel
+Msant*Drawing Tools*Raster.label:		Raster
+Msant*Drawing Tools*Undelete Items.label:	Objekte
+Msant*Drawing Tools*automatic.label:		automatisch
+
+Msant*File.title:			Dateioperationen
+Msant*Analysis.title:			Analyse
+Msant*Drawing Tools.title:		Zeichnen
+Msant*Undelete-Buffer Size.title:	Wiedereinfügen: Puffergrösse
+Msant*menu_undel*Undelete.label: 	Wiedereinfügen
+Msant*menu_undel*Buffer Size.label:	Puffergrösse
+
+!! Hier die folgen eingebauten Message- und Formatstrings
+!! jeder string ist vom n"achsten durch \002 abgetrennt. Die
+!! Reihenfolge und Anzahl muss mit der in 'common/msant_strings.h'
+!! definierten "ubereinstimmen.
+#include "Messages.ge"

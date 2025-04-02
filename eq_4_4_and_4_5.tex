@@ -1,0 +1,153 @@
+\documentclass[10pt,notitlepage,letterpaper,landscape,twocolumn]{article}
+
+\usepackage[T1]{fontenc}
+%\usepackage{textcomp}
+\usepackage{bookman}
+%\usepackage{color}
+%\usepackage{graphicx}
+\newcommand{\besY}{\mathrm{Y}}
+\newcommand{\rot}{\vec{\mathrm{rot}}}
+\newcommand{\ez}{\vec{\mathrm{e}}_z}
+\newcommand{\eg}{\vec{\mathrm{e}}_\Gamma}
+\newcommand{\en}{\vec{\mathrm{e}}_n}
+\newcommand{\nabt}{\vec{\nabla}_t}
+\newcommand{\eqnr}[1]{(\ref{eqn:#1})}
+\newcommand{\dd}{\mathrm{d}}
+
+\setlength{\textheight}{1.05\textheight}
+\pagestyle{empty}
+
+\begin{document}
+\noindent
+Some auxiliary info regarding eqns. (4-1) -- (4-5). We note that the normal
+derivative in (4-5) also is taken in direction of the outer normal
+which is consistent with other use of the term ``normal'' in the text.
+However, the apparent
+lack of a ``minus''-sign in front of the $V\, \partial\,\Psi/\partial n$ term
+when using $\Psi=\besY_0(kr)$ (because $\besY_0' = -\besY_1$) shall be explained below.
+
+First we focus on (4-1) which connects the $\vec{H}$-field to
+$\partial V/\partial n$:
+\begin{displaymath}
+    -j\omega\mu\vec{H} = \rot \vec{E}
+  = \rot \left(-\,\ez\,\frac{V}{D}\right)
+  = \frac{-1}{D} \nabt \times ( \ez\, V )
+  = \frac{1}{D}\,\ez\, \times \nabt V
+\end{displaymath}
+and therefore (multiplying by $-\,\eg$ on both sides)
+\begin{displaymath}
+     j\omega\mu D\, (\eg\cdot\vec{H})
+  = -\,\eg\cdot(\ez\,\times\nabt V)
+  = -\nabt V \cdot (\eg\times\ez)
+  = -\nabt V \cdot \en
+  = -\frac{\partial V}{\partial n}
+\end{displaymath}
+hence
+\begin{equation}
+\label{eqn:eqn1}
+    \frac{\partial V}{\partial n}
+  = -j\omega\mu D\, (\eg\cdot\vec{H})
+  = -j k \sqrt{\frac{\mu}{\varepsilon}} D\, (\eg\cdot\vec{H})
+\end{equation}
+
+Secondly, we calculate $\partial \besY_0(kr)/\partial n$ (the vector $\vec{r}$
+pointing from field or ``test'' point $P$ towards the boundary or ``source''
+point $Q$, hence 
+$\partial/\partial r=\partial/\partial n$)
+\begin{equation}
+\label{eqn:eqn2}
+	\frac{\partial \Psi}{\partial n}
+  = \frac{\partial \besY_0(kr)}{\partial n}
+  = \besY_0(kr)' k \frac{\partial r}{\partial n}
+  = - \besY_1(kr) k \frac{\partial r}{\partial n}
+\end{equation}
+
+We now turn to Green's identity (4-4)
+\begin{displaymath}
+	\int\!\!\!\int_A\!\! \left(\Psi\Delta_t V - V \Delta_t \Psi\right)\, dA
+	= \oint_\Gamma
+		\left(
+			\Psi \frac{\partial V}{\partial n}
+	   -    V    \frac{\partial \Psi}{\partial n}
+	    \right)
+		\dd s
+\end{displaymath}
+and use $\Psi=\besY_0$. We work around the singularity at $kr=0$ by excluding
+the field point $P$ from the surface area $A$ but add a little circle $\Gamma_P$
+around $P$ to the contour on the right hand side. Since now both, $V$ and $\besY_0$
+satisfy the wave equation (4-2) the left hand side vanishes everywhere:
+\begin{displaymath}
+	0 = \oint_{\Gamma + \Gamma_P}
+		\left(
+			\besY_0 \frac{\partial V}{\partial n}
+	   -    V    \frac{\partial \besY_0}{\partial n}
+	    \right)
+		\dd s
+\end{displaymath}
+Substituting $\partial V/\partial n$  and $\partial \besY_0/\partial n$
+using \eqnr{eqn1} and \eqnr{eqn2}, respectively we note that a minus sign
+appears in both places so that
+\begin{eqnarray*}
+	0 & = & \oint_{\Gamma + \Gamma_P}
+		\left(
+		\besY_0(kr)
+          \left(-j k \sqrt{\frac{\mu}{\varepsilon}} D\, (\eg\cdot\vec{H})\right)
+	   -    V   
+        \left( - \besY_1(kr) k \frac{\partial r}{\partial n} \right)
+	    \right)
+		\dd s
+\\
+	 & = & k \oint_{\Gamma + \Gamma_P}
+		\left(
+          j \sqrt{\frac{\mu}{\varepsilon}} D\, (\eg\cdot\vec{H})\, \besY_0(kr)
+	   -    V\, 
+         \besY_1(kr) \frac{\partial r}{\partial n}
+	    \right)
+		\dd s
+\end{eqnarray*}
+All that is left to do is calculating the contour integral along the small
+circle $\Gamma_P$ of radius $r_\gamma$ for $\lim_{r_\gamma \rightarrow 0}$.
+Because the inside area of $\Gamma_P$ is {\em outside} of $A$, the normal
+derivative $\partial/\partial n = -\partial/\partial r_\gamma$.
+
+Since $V$ is well-behaved around $P$, and
+$\int_0^{2 \pi} \partial V /\partial r_\gamma \dd \varphi < C$ with
+$C$ a suitable constant the first part vanishes:
+\begin{eqnarray*}
+\lim_{r_\gamma\rightarrow 0}
+k \oint_{\Gamma_P}\!\!\! \frac{-\partial V}{\partial n} \besY_0(k r_\gamma) \dd s
+ & = &
+\lim_{r_\gamma\rightarrow 0}
+\int_0^{2 \pi}\!\!\!
+       \frac{\partial V}{\partial r_\gamma} \besY_0(k r_\gamma) k r_\gamma \dd \varphi
+\\ & < &
+\lim_{kr_\gamma\rightarrow 0}
+C \besY_0(k r_\gamma) k r_\gamma
+= 0
+\end{eqnarray*}
+For the second part we obtain
+\begin{eqnarray*}
+\lim_{r_\gamma\rightarrow 0}
+k \oint_{\Gamma_P}\!\!\!
+         V
+         \besY_1(kr_\gamma) \frac{\partial r_\gamma}{\partial n}
+		 \dd s
+& = &
+\lim_{r_\gamma\rightarrow 0}
+- \int_0^{2 \pi}
+	V
+    \besY_1(kr_\gamma) \frac{\partial r_\gamma}{\partial r_\gamma}
+	k r_\gamma
+	\dd \varphi
+\\ 
+& = &
+- 2 \pi 
+\lim_{r_\gamma\rightarrow 0}
+	V
+    \besY_1(kr_\gamma)
+	k r_\gamma
+\\
+& = & - 2 \pi \left(\frac{-2}{\pi}\right) V = 4 V
+\end{eqnarray*}
+yielding eq. (4-5) of the text.
+\end{document}

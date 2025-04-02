@@ -1,0 +1,113 @@
+XCOMM uncomment the following, if you have the
+XCOMM xpm-library. Set the path XPMINCLUDEPATH accordingly
+XCOMM If you don't have xpm some icons won't be displayed;
+XCOMM functionality is not affected however
+
+#define HasXpm
+XCOMM XPMINCLUDEPATH= -I/usr/X11R6/include/X11
+XPMINCLUDEPATH= -I/usr/include/X11
+DEPENDFLAGS=-cpp
+
+XCOMM uncomment this if you have the 3D library to make
+XCOMM the athena widgets appear nicer.
+#define HasXaw3D
+
+XCOMM ###################################################
+XCOMM
+XCOMM IF YOU USE THE NETLIB ROUTINES YOU MIGHT HAVE TO
+XCOMM CHANGE THE MACHINE CONSTANTS! CHECK / EDIT
+XCOMM THE FILE nmath/r1mach.f (defaults to IBM/PC / IEEE)
+XCOMM
+XCOMM ###################################################
+
+XCOMM uncomment, if you have IMSL
+XCOMM some public domain routines from NETLIB are used
+XCOMM if you don't.
+XCOMM #define HasImsl
+
+XCOMM uncomment, if you have the GRIPS-library
+XCOMM some public domain routines from NETLIB are used
+XCOMM if you don't.
+XCOMM #define HasGrips
+
+XCOMM uncomment, if you have the 'numerical recipes in C' to
+XCOMM use their Bulirsch/Stoer ODE-integrator.
+XCOMM some public domain routines from NETLIB are used
+XCOMM if you don't. (substituting Runge-Kutta)
+XCOMM #define HasNRecipes
+
+XCOMM you won't have this one - so don't uncomment 
+XCOMM #define HasXTutil
+
+XCOMM chose one of the compilers
+
+XCOMM #define UseGcc
+XCOMM #define UseAcc
+#define UseGcc
+
+FC = gfortran
+
+EXTRA_DEFINES    = -D_POSIX_SOURCE
+
+FCFLAGS = -O4
+
+XCOMM *************** shouldn't have to change things below here ********
+
+CCLINK		 = $(FC)
+
+#ifdef UseGcc
+	     CC = gcc
+      CCOPTIONS = -Wall -fno-strict-aliasing
+#endif
+#ifdef UseAcc
+	     CC = acc
+debug := CDEBUGFLAGS	 = -g
+      CCOPTIONS = -vg
+#endif
+#ifdef UseCc
+	     CC = cc
+debug := CDEBUGFLAGS	 = -g
+#endif
+
+#ifdef HasImsl
+EXTRA_DEFINES   += -DHASIMSL
+#endif
+#ifdef HasNRecipes
+EXTRA_DEFINES   += -DHASNRECIPES
+#endif
+#ifdef HasXaw3D
+EXTRA_DEFINES   += -DXAW3D
+#endif
+#ifdef HasXpm
+EXTRA_DEFINES   += -DHASXPM
+#endif
+#ifdef HasXTutil
+EXTRA_DEFINES   += -DHASXTUTIL
+#endif
+
+
+#ifdef HasXaw3D
+HASXAW3D      = -DXAW3D
+#else
+HASXAW3D      =
+#endif
+
+#ifdef HasXpm
+HASXPM	      = -DHASXPM
+#else
+HASXPM	      =
+#endif
+
+#ifdef HasXTutil
+HASXTUTIL     = -DHASXTUTIL
+#else
+HASXTUTIL     = 
+#endif
+
+
+#ifdef HasXaw3D
+XAWLIB	      = -lXaw3d
+#else
+HASXAW3D      =
+#endif
+

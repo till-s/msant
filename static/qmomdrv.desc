@@ -1,0 +1,16 @@
+qmom nu z
+z	imatrix m n it
+w   matrix  m n
+w1  matrix  m n
+nu  scalar
+
+qmoms_wrap w w1 nu z m n
+w	double
+w1	double
+nu	double
+z	double
+m	integer
+n	integer
+
+out sequence w w1
+******************

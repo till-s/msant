@@ -1,0 +1,30 @@
+#include "../Imake.opts"
+
+FPPSOURCE = derivs.f.cpp
+FSOURCE = $(FPPSOURCE:%.cpp=%) tstf.f
+CSOURCE = sommod.c
+PSOURCE = tst.c
+
+SRCS =  $(CSOURCE) $(FSOURCE) $(PSOURCE)
+LIBOBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.f=%.o)
+OBJS = $(LIBOBJS) $(PSOURCE:%.c=%.o)
+
+DEPLIBS=libgreen.a ../nmath/libnmath.a
+LOCAL_LDFLAGS = -L. -L/usr/local/lib -L../nmath
+LOCAL_LIBRARIES = -lgreen -lnrcp -lnmath -lamos
+
+%.f: %.f.cpp
+	RemoveFile($@)
+	$(CPP) $(EXTRA_DEFINES) $@.cpp | CppSedMagic >$@
+
+includes:: $(SRCS)
+
+clean::
+	RemoveFile($(FPPSOURCE:%.f.cpp=%.f))
+
+#if 0
+ComplexProgramTarget(tst)
+#endif
+NormalLibraryTarget(green,$(LIBOBJS))
+NormalFortranObjectRule()
+DependTarget()

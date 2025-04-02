@@ -1,0 +1,15 @@
+/*
+ * definitions of the widgets files needed for the `xfm' application
+ */
+
+/*
+#define DoMakeScanStrings
+*/
+
+LIBNAME = xfmWidgeTills
+INCLUDE_TEMPLATES = TextField.h.lexinp SmplAccMnu.h.lexinp SAccmeBSB.h.lexinp FocusForm.h.lexinp
+INCLUDE_TEMPLATES+=VpFrame.h.lexinp
+HEADERS = TextFieldP.h SmplAccMnP.h SAccmeBSBP.h FocusFormP.h $(INCLUDE_TEMPLATES:%.lexinp=%)
+HEADERS+=VpFrameP.h
+SRCS2 = $(INCLUDE_TEMPLATES:%.h.lexinp=%.c)
+OBJS2 = $(SRCS2:%.c=%.o)

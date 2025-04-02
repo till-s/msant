@@ -1,0 +1,2010 @@
+#!/bin/sh
+# This is a shell archive (produced by shar 3.50)
+# To extract the files from this archive, save it to a file, remove
+# everything above the "!/bin/sh" line above, and type "sh file_name".
+#
+# made 10/07/1994 02:36 UTC by moshier@world
+# Source directory /home/ie/moshier/tmp
+#
+# existing files will NOT be overwritten unless -c is specified
+#
+# This shar contains:
+# length  mode       name
+# ------ ---------- ------------------------------------------
+#    281 -rw------- note.doc
+#   2506 -rw------- remes.c
+#   1632 -rw------- remes.h
+#    689 -rw------- remes.mak
+#   3514 -rw------- remesa.c
+#   2200 -rw------- remese.c
+#  10882 -rw------- remesf.c
+#   1707 -rw------- remesg.c
+#   1464 -rw------- remesp.c
+#   2817 -rw------- remess.c
+#   1519 -rw------- remesw.c
+#   2953 -rw------- simq.c
+#    210 -rw------- unix.mak
+#
+# ============= note.doc ==============
+if test -f 'note.doc' -a X"$1" != X"-c"; then
+	echo 'x - skipping note.doc (File already exists)'
+else
+echo 'x - extracting note.doc (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'note.doc' &&
+X   A detailed discussion of this Remes program may be found
+in _Methods and Programs for Mathematical Functions_
+(Prentice-Hall or Simon & Schuster International, 1989).
+X
+X   You must supply a routine for the function to be approximated.
+Your function is called from remesf.c.
+X
+SLM
+SHAR_EOF
+chmod 0600 note.doc ||
+echo 'restore of note.doc failed'
+Wc_c="`wc -c < 'note.doc'`"
+test 281 -eq "$Wc_c" ||
+	echo 'note.doc: original size 281, current size' "$Wc_c"
+fi
+# ============= remes.c ==============
+if test -f 'remes.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping remes.c (File already exists)'
+else
+echo 'x - extracting remes.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remes.c' &&
+/* remes.c
+X *
+X * This is an interactive program that computes least maximum polynomial
+X * and rational approximations.
+X * Last rev: 21 Sept 1986
+X */
+#include <stdio.h>
+#include "remes.h"
+X
+void main()
+{
+int i;
+int chgflg; /* flags changes to default values */
+char s[40];
+char *sp;
+X
+X
+printf( "\nRational Approximation by Remes Algorithm\n\n" );
+X
+START:
+X
+/* Get operator commands. */
+remesa();
+X
+/* Jump to operator intervention point. */
+goto showg;
+X
+X
+LOOP:
+X
+iter += 1;
+printf( "Iteration %d\n", iter );
+X
+if( search != 0 )
+X	{
+/* Search for error maxima. */
+X	remess();
+X	goto solveq;
+X	}
+X
+showg:
+/* Display old values of guesses */
+/* and let user change them if desired */
+chgflg = 0;
+/* First get the step size if rational form */
+if( (d > 0) && (search != 0) )
+X	{ /* there is a denominator polynomial */
+X	printf( "delta = %.4E ? ", delta );
+X	gets( s );
+/* If input is not a null line, */
+/* then decode the number. */
+X	if( s[0] != '\0' )
+X		{
+X		chgflg = 1;
+X		sscanf( s, "%lf", &delta );
+X		}
+X	for( i=0; i<=neq; i++ )
+X		step[i] *= delta;
+X	}
+X
+/* Read in guesses for locations of solution. */
+for( i=0; i<neq; i++ )
+X	{
+X	printf( "x[%d] = %.4E ? ", i, xx[i] );
+X	gets( s );
+X	if( s[0] != '\0' )
+X		{
+X		chgflg = 1;
+X		sscanf( s, "%lf", &xx[i] );
+X		if( (d == 0) && ((config & ZER) == 0) )
+X			mm[i] = xx[i];
+X		}
+X	}
+X
+if( (d > 0) || ((config & ZER) != 0) )
+X	{
+X	for( i=0; i <=neq; i++ )
+X		{
+X		printf( "peak[%d] = %.4E ? ", i, mm[i] );
+X		gets( s );
+X		if( s[0] != '\0' )
+X			{
+X			chgflg = 1;
+X			sscanf( s, "%lf", &mm[i] );
+X			}
+X		}
+X	}
+X
+/* If there were any changes to the default values */
+/* then reinitialize the step size array. */
+if( chgflg )
+X	stpini();
+X
+solveq:
+X
+/* Solve equations. */
+remese();
+X
+goto whtnxt;
+X
+X
+ptabl:
+X
+/* Display the results */
+remesp();
+X
+X
+whtnxt:
+/* Test for convergence criteria. */
+if( (delta < 1.0e-15) || (spread < 1.0e-15) )
+X	askitr = iter;
+if( askitr > iter )
+X	goto LOOP;
+X
+/* Ask what to do next */
+printf(
+"Enter #(iterations), p(rint), w(rite), g(uess), x(it), t(runc), n(one) ?");
+/* Get command line from operator */
+sp = &s[0];
+gets( sp );
+X
+if( *sp == 'w' )
+X	{ /* Write results to file */
+X	remesw();
+X	goto whtnxt;
+X	}
+if( *sp == 'g' ) /* Modify the guesses */
+X	goto showg;
+if( *sp == 'p' ) /* Display results */
+X	goto ptabl;
+if( (*sp >= '1') && (*sp <= '9') )
+X	{ /* Numeric input is iteration count */
+X	sscanf( sp, "%d", &askitr );
+X	askitr += iter;
+X	goto LOOP;
+X	}
+if( *sp == 't' )
+X	{
+X	config |= TRUNC;
+X	goto whtnxt;
+X	}
+/* Close files and exit */
+if( *sp == 'x' )
+X	exit(0);
+else
+X	goto START;
+}
+SHAR_EOF
+chmod 0600 remes.c ||
+echo 'restore of remes.c failed'
+Wc_c="`wc -c < 'remes.c'`"
+test 2506 -eq "$Wc_c" ||
+	echo 'remes.c: original size 2506, current size' "$Wc_c"
+fi
+# ============= remes.h ==============
+if test -f 'remes.h' -a X"$1" != X"-c"; then
+	echo 'x - skipping remes.h (File already exists)'
+else
+echo 'x - extracting remes.h (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remes.h' &&
+/* remes.h */
+/* Definition file for Remes program */
+#define P 24 /* max total degree of polynomials, + 2 */
+#define N 20 /* number of items to tabulate for display */
+X
+extern double PI; /* 3.14159... */
+X
+extern int IPS[];
+extern double AA[];
+extern double BB[];
+extern double param[];
+extern double xx[];
+extern double mm[];
+extern double yy[];
+extern double step[];
+extern double qx;
+extern double qy;
+extern double qyaprx;
+extern double dev;
+extern double apstrt;
+extern double apwidt;
+extern double apend;
+extern double xm;
+extern double xn;
+extern double ym;
+extern double yn;
+extern double delta;
+extern double eclose;
+extern double farther;
+extern double spread;
+extern int esign;
+extern int n;
+extern int d;
+extern int nd1;
+extern int neq;
+extern int relerr;
+extern int search;
+extern int iter;
+extern int askitr;
+extern char funnam[];
+extern char znam[];
+void remesa(), remese(), remesp();
+void remess(), remesw(), stpini(), pconfig();
+int simq();
+X
+/* flag bits for type of approximation: */
+extern int config;
+/* R(z^2) */
+#define PXSQ 1
+/* z R() */
+#define XPX 2
+/* Pade form with denominator Q(z) - zP(z) */
+#define PADE 4
+/* Cody & Waite form x + x^2 R(z)
+X * note, if degree of denominator = 0 then set ZER bit also */
+#define CW 8
+/* squeeze toward low end of approximation interval */
+#define SQL 16
+/* search for zeros, even if no denominator */
+#define ZER 32
+/* z^2 R() */
+#define X2PX 64
+/* squeeze toward high end */
+#define SQH 128
+/* special modifications done by special() (see remesf.c) */
+#define SPECIAL 256
+/* truncate coefficients after each solution */
+#define TRUNC 512
+/* R(z^3) */
+#define PXCU 1024
+SHAR_EOF
+chmod 0600 remes.h ||
+echo 'restore of remes.h failed'
+Wc_c="`wc -c < 'remes.h'`"
+test 1632 -eq "$Wc_c" ||
+	echo 'remes.h: original size 1632, current size' "$Wc_c"
+fi
+# ============= remes.mak ==============
+if test -f 'remes.mak' -a X"$1" != X"-c"; then
+	echo 'x - skipping remes.mak (File already exists)'
+else
+echo 'x - extracting remes.mak (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remes.mak' &&
+# MSDOS make file for remes.exe
+CFLAGS=/c /Od
+X
+remes.obj: remes.c remes.h
+X	cl $(CFLAGS) remes.c
+X
+remesa.obj: remesa.c remes.h
+X	cl $(CFLAGS) remesa.c
+X
+remese.obj: remese.c remes.h
+X	cl $(CFLAGS) remese.c
+X
+remesf.obj: remesf.c remes.h
+X	cl $(CFLAGS) /Od remesf.c
+X
+remesg.obj: remesg.c remes.h
+X	cl $(CFLAGS) remesg.c
+X
+remesp.obj: remesp.c remes.h
+X	cl $(CFLAGS) remesp.c
+X
+remess.obj: remess.c remes.h
+X	cl $(CFLAGS) remess.c
+X
+remesw.obj: remesw.c remes.h
+X	cl $(CFLAGS) remesw.c
+X
+simq.obj: simq.c
+X	cl $(CFLAGS) simq.c
+X
+remes.exe: remes.obj remesa.obj remese.obj remesf.obj \
+remesg.obj remesp.obj remess.obj remesw.obj simq.obj
+X  link remes remesa remese remesf remesg remesp remess remesw simq;
+X
+SHAR_EOF
+chmod 0600 remes.mak ||
+echo 'restore of remes.mak failed'
+Wc_c="`wc -c < 'remes.mak'`"
+test 689 -eq "$Wc_c" ||
+	echo 'remes.mak: original size 689, current size' "$Wc_c"
+fi
+# ============= remesa.c ==============
+if test -f 'remesa.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping remesa.c (File already exists)'
+else
+echo 'x - extracting remesa.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remesa.c' &&
+/* remesa.c */
+X
+#include <stdio.h>
+#include "remes.h"
+#define PI 3.14159265358979323846
+X
+/* Subroutine to get operator instructions. */
+X
+void remesa()
+{
+char s[40];
+double a, r;
+int i, k, ncheb;
+double func(), cos(), sqrt();
+X
+/* Ask for error criterion */
+printf( "Relative error (y or n) ? " );
+gets( s ); /* Read in operator's response. */
+relerr = 0;
+if( s[0] == 'y' ) /* "y" means yes. */
+X	relerr = 1;
+X
+/* Enable Automatic search. */
+search = 1;
+X
+getconf:
+X
+printf( "Configuration word = " );
+pconfig();
+printf( " ? " );
+gets(s);
+if( s[0] != '\0' )
+X	{
+/* Display a menu of configuration bits */
+X	if( s[0] == '?' )
+X		{
+X		k = config;
+X		config = 0xffff;
+X		pconfig();
+X		config = k;
+X		goto getconf;
+X		}
+X	else
+X		{
+X		sscanf( s, "%x", &config );
+X		pconfig();
+X		}
+X	printf( "\n" );
+X	}
+X
+printf( "Degree of numerator polynomial? " );
+gets( s );		/* read line */
+sscanf( s, "%d", &n );	/* decode characters */
+X
+printf( "Degree of denominator polynomial? " );
+gets( s );
+sscanf( s, "%d", &d );
+X
+printf ( "Start of approximation interval ? " );
+gets( s );
+sscanf( s, "%lf", &apstrt );
+X
+getwid:
+printf ( "Width of approximation interval ? " );
+gets( s );
+sscanf( s, "%lf", &apwidt );
+if( apwidt <= 0.0 )
+X	{
+X	puts( "? must be > 0" );
+X	goto getwid;
+X	}
+apend = apstrt + apwidt;
+nd1 = n + d + 1;
+spread = 1.0e37;
+iter = 0;
+askitr = 1;
+X
+/* Supply initial guesses for solution points. */
+X
+if( (d == 0) && ((config & ZER) == 0) )
+X	{ /* there is no denominator polynomial */
+X	neq = n + 2; /* The number of equations to solve */
+X	mm[neq] = apend;
+X	}
+else
+X	{
+X	neq = nd1;
+X	}
+ncheb = nd1; /* Degree of Chebyshev error estimate */
+X
+/* Find ncheb+1 extrema of Chebyshev polynomial */
+a = ncheb;
+mm[0] = apstrt;
+for( i=1; i<ncheb; i++ )
+X	{
+X	r = 0.5 * (1.0 - cos( (PI * i) / a ) );
+X	if( config & SQL )
+X		r = r * sqrt(r);
+X	else if( config & SQH )
+X		r = sqrt(r);
+X	mm[i] = apstrt + r * apwidt;
+X	}
+mm[ncheb] = apend;
+X
+if( (d == 0) && ((config & ZER) == 0) )
+X	{ /* The operative locations are maxima. */
+X	for( i=0; i<=neq; i++ )
+X		xx[i] = mm[i];
+X	}
+else
+X	{ /* Zeros of Chebyshev polynomial */
+X	a = 2.0 * ncheb;
+X	for( i=0; i<=ncheb; i++ )
+X		{
+X		r = 0.5 * (1.0 - cos( PI * (2*i+1) / a ) );
+/* Squeeze toward low end of approximation interval. */
+X		if( config & SQL )
+X			r = r * sqrt(r);
+/* Squeeze toward high end. */
+X		else if( config & SQH )
+X			r = sqrt(r);
+X		xx[i] = apstrt + r * apwidt;
+X		}
+/* Deviation at solution points */
+X	dev = 0.0;
+X	}
+X
+/* If form is xR(x), avoid x = 0 */
+if( config & (XPX | X2PX) )
+X	{
+X	if( config & CW )
+X		qx = 1.0e-15 + xx[0]/2.0;
+X	else
+X		qx =  1.0e-15 + apstrt * (1.0 + 1.0e-15);
+X	mm[0] = qx;
+X	printf( "mm[0] = %.15E\n", qx );
+X	if( (d == 0) && ((config & ZER) == 0) )
+X		xx[0] = qx;
+X	}
+/* Initialize step sizes */
+stpini();
+}
+X
+X
+X
+/* Subroutine to initialize step sizes. */
+void stpini()
+{
+int i;
+X
+if( search )
+X	{
+X	xx[neq+1] = apend;
+X	delta = 0.25;
+X	if( (d > 0) || ((config & ZER) != 0) )
+X		{
+X		step[0] = xx[0] - apstrt;
+X		for( i=1; i<neq; i++ )
+X			step[i] = xx[i] - xx[i-1];
+X		}
+X	else
+X		{
+X		step[0] = 0.0625 * (xx[1] - xx[0]);
+X		for( i=1; i<neq; i++ )
+X			step[i] = 0.0625 * (xx[i+1] - xx[i]);
+X		}
+X	step[neq] = step[neq-1];
+X	}
+}
+X
+X
+/* Bits of configuration word */
+#define NCNFG 11
+X
+static char *cnfmsg[NCNFG] = {
+"PXSQ",
+"XPX",
+"PADE",
+"CW",
+"SQL",
+"ZER",
+"X2PX",
+"SQH",
+"SPECIAL",
+"TRUNC",
+"PXCU"
+};
+X
+/* Subroutine to Display the configuration word */
+X
+void pconfig()
+{
+int i, k;
+X
+k = 1;
+for( i=0; i<NCNFG; i++ )
+X	{
+X	if( k & config )
+X		printf( "%x:%s ", k, cnfmsg[i] );
+X	k <<= 1;
+X	}
+printf( "hex value = %x ", config );
+}
+SHAR_EOF
+chmod 0600 remesa.c ||
+echo 'restore of remesa.c failed'
+Wc_c="`wc -c < 'remesa.c'`"
+test 3514 -eq "$Wc_c" ||
+	echo 'remesa.c: original size 3514, current size' "$Wc_c"
+fi
+# ============= remese.c ==============
+if test -f 'remese.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping remese.c (File already exists)'
+else
+echo 'x - extracting remese.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remese.c' &&
+/*		remese.c	*/
+X
+/* Solve equations */
+X
+#include "remes.h"
+X
+void remese()
+{
+double x, y, z, gx, gxsq, pade;
+float sprec;
+int i, j, ip;
+double gofx(), func(), special();
+X
+gxsq = 0.0;
+pade = 0.0;
+X
+if( (d == 0) && ((config & ZER) == 0) )
+X	{ /* no denominator: */
+/* In this case the deviation is an unknown variable */
+/* adjoined to the other unknowns; it has a coefficient */
+/* of plus or minus 1. */
+X	dev = 1.0;
+X	}
+else
+X	{
+/* Otherwise dev = 0, since the solution sought is */
+/* for the locations of zero error. */
+X	dev = 0.0;
+X	}
+X
+/* Set up the equations for solution by simq() */
+for( i=0; i<neq; i++ )
+X	{
+/* Offset to 1st element of this row of matrix */
+X	ip = neq * i;
+/* The guess for this row */
+X	x = xx[i];
+/* Right-hand-side vector */
+X	y = func(x);
+X	gx = gofx(x);
+X	if( config & PXCU )
+X		gxsq = gx * gx * gx;
+X	if( config & PXSQ )
+X		gxsq = gx * gx;
+X	if( config & PADE )
+X		{
+X		pade = 2.0 + y;
+X		}
+X	if( d > 0 )
+X		{ /* add the deviation if rational form */
+/* Relative error criterion */
+X		if( relerr )
+X			y = y * (1.0+dev);
+/* Absolute error criterion */
+X		else
+X			y = y + dev;
+X		}
+X	if( config & CW )
+X		{ /* y(1+dev) = z + z^2 P/Q */
+X		y = (y - gx)/(gx*gx);
+X		}
+X	if( config & SPECIAL )
+X		{
+X		y = special( y, gx );
+X		}
+/* Insert powers of x[i] for numerator coefficients. */
+X	if( config & XPX )
+X		z = gx;
+X	else if( config & X2PX )
+X		z = gx * gx;
+X	else
+X		z = 1.0;
+X	for( j=0; j<=n; j++ )
+X		{
+X		if( config & PADE )
+X			AA[ip+j] = pade * z;
+X		else
+X			AA[ip+j] = z;
+X		if( config & (PXSQ | PXCU) )
+X			z = z * gxsq;
+X		else
+X			z = z * gx;
+X		}
+/* Insert denominator terms, if any. */
+X	if( d > 0 )
+X		{
+X		z = 1.0;
+X		for( j=0; j<d; j++ )
+X			{
+X			AA[ip+n+1+j] = -y * z;
+X			if( config & (PXSQ | PXCU) )
+X				z = z * gxsq;
+X			else
+X				z = z * gx;
+X			}
+/* Right hand side vector */
+X		BB[i] = y * z;
+X		}
+X	else
+X		{ /* No denominator */
+/* Right hand side vector */
+X		BB[i] = y;
+X		z = dev;
+X		if( relerr )
+X			z = z * y;
+X		AA[ip+n+1] = z;
+X		}
+/* Switch sign of deviation for next row. */
+X	dev = -1.0 * dev;
+X	}
+X
+/* Solve the simultaneous linear equations. */
+simq( &AA[0], &BB[0], &param[0], neq, 0, &IPS[0] );
+if( config & TRUNC )
+X	{
+X	for( i=0; i<neq; i++ )
+X		{
+X		sprec = (float )param[i];
+X		param[i] = sprec;
+X		}
+X	}
+}
+SHAR_EOF
+chmod 0600 remese.c ||
+echo 'restore of remese.c failed'
+Wc_c="`wc -c < 'remese.c'`"
+test 2200 -eq "$Wc_c" ||
+	echo 'remese.c: original size 2200, current size' "$Wc_c"
+fi
+# ============= remesf.c ==============
+if test -f 'remesf.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping remesf.c (File already exists)'
+else
+echo 'x - extracting remesf.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remesf.c' &&
+/* remesf.c */
+X
+#include "remes.h"
+X
+/* For special, nonstandard approximation forms, define one of
+X   the SPEC macros nonzero or write your own version.
+X   For standard forms, fill in a string for funnam and bits for config.  */
+#define SPEC1 1
+X
+/* Insert function name and formulas for printout */
+char funnam[] = {
+#if SPEC1
+"exp(x) = 1 + x + .5x^2 + "
+#endif
+#if SPEC2
+"exp2(x) = 1 + "
+#endif
+#if SPEC3
+"log gamma(x) = ( x - 0.5 ) * log(x) - x + LS2PI + 1/x P(1/x^2)"
+#endif
+#if SPEC4
+"gamma(x) = sqrt(2 pi) x^(x-.5) exp(-x) (1 + 1/x P(1/x))"
+#endif
+#if SPEC5
+"atan(y0/j0) + pi/4"
+#endif
+#if SPEC6
+"j0^2(1/x) + y0^2(1/x)"
+#endif
+#if SPEC7
+"j0(x) = (x^2-r0^2)(x^2-r1^2)R(x)"
+#endif
+#if SPEC8
+"j1^2(1/x) + y1^2(1/x)"
+#endif
+#if SPEC9
+"j1(x) = (x^2-r0^2)(x^2-r1^2)(x^2-r3^2)R(x)"
+#endif
+#if SPEC10
+"atan(y1/j1) + 3pi/4"
+#endif
+#if SPEC11
+"y0(x) = 2/pi * log(x) * j0(x) + (x^2-YZ1)*P(x^2)"
+#endif
+#if SPEC12
+"y0(x) = (x-YZ1)(x-YZ2)(x-YZ3)(x-YZ4)R(x)"
+#endif
+#if SPEC13
+"y1(x) = 2/pi * (log(x) * j1(x) - 1/x) + R(x^2)"
+#endif
+#if SPEC14
+"y1(x) = (x-YZ1)(x-YZ2)(x-YZ3)(x-YZ4)R(x)"
+#endif
+#if SPEC15
+"erf(x)"
+#endif
+#if SPEC16
+"erfc(x) = exp(-x^2) R(1/x)"
+#endif
+/* "1/sqrt(x) = "*/
+};
+X
+char znam[] = { "x" };
+X
+X
+/* The flag bits for type of approximation:
+X   PXSQ | XPX | X2PX | SQL | SQH | PADE | CW | ZER | SPECIAL | PXCU
+X   See remes.h for definitions.  */
+X
+int config =
+#if SPEC1
+X  ZER | X2PX | SQH | SPECIAL;
+#endif
+#if SPEC2
+X  ZER | XPX | SQH | SPECIAL;
+#endif
+#if SPEC3
+X  SQH | ZER | XPX | PXSQ | SPECIAL;
+#endif
+#if SPEC4
+X  SQH | ZER | XPX | SPECIAL;
+#endif
+#if SPEC5
+X  SQH | ZER | XPX | PXSQ;
+#endif
+#if SPEC6
+X  SQH | ZER | XPX | PXSQ;
+#endif
+#if SPEC7
+X  SQH | ZER | PXSQ | SPECIAL;
+#endif
+#if SPEC8
+X  SQH | ZER | XPX | PXSQ;
+#endif
+#if SPEC9
+X  SQH | ZER | XPX | SPECIAL;
+#endif
+#if SPEC10
+X  SQH | ZER | XPX | PXSQ;
+#endif
+#if SPEC11
+X  SQH | ZER | PXSQ | SPECIAL;
+#endif
+#if SPEC12
+X  ZER | SPECIAL;
+#endif
+#if SPEC13
+X  SQH | ZER | XPX | PXSQ | SPECIAL;
+#endif
+#if SPEC14
+X  ZER | SPECIAL;
+#endif
+#if SPEC15
+X  SQH | ZER | XPX | PXSQ;
+#endif
+#if SPEC16
+X  ZER | XPX | PXSQ | SPECIAL;
+#endif
+X
+X
+#if SPEC3
+#define LS2PI 0.91893853320467274178
+#endif
+#if SPEC4
+#define SQTPI  2.50662827463100050242
+#endif
+#if SPEC7
+#define JZ1   5.783185962946784521176
+#define JZ2  30.471262343662086399078
+#define JZ3  74.887006790695183444889
+#endif
+#if SPEC9
+#define JZ11 1.46819706421238932572e1
+#define JZ12 4.92184563216946036703e1
+#define JZ13 1.03499453895136580332e2
+#endif
+#if SPEC11 || SPEC12 || SPEC13 || SPEC14
+/*  2/pi  */
+#define TWOOPI 6.36619772367581343075535E-1
+#define YZ1    7.98479794664680489965E-1
+#define YZ2    1.56632184707105519425E1
+#define YZ3    5.02121196292038770878E1
+#define Y1Z1   2.19714132603101703515E0
+#define Y1Z2   5.42968104079413513277E0
+#define Y1Z3   8.59600586833116892643E0
+#define Y1Z4   1.17491548308398812434E1
+#endif
+X
+/* This subroutine computes the rational form P(x)/Q(x) */
+/* using coefficients from the solution vector param[]. */
+X
+double approx(x)
+double x;
+{
+double gx, z, yn, yd;
+double gofx(), speci();
+int i;
+X
+gx = gofx(x);
+if( config & PXCU )
+X	z = gx * gx * gx;
+else if( config & PXSQ )
+X	z = gx * gx;
+else
+X	z = gx;
+X
+/* Highest order numerator coefficient */
+yn = param[n];
+X
+/* Work backwards toward the constant term. */
+for( i=n-1; i>=0; i-- )
+X	yn = z * yn  +  param[i];
+X	
+if( d > 0 )
+X	{
+/* Highest degree coefficient = 1.0 */
+X	yd = z + param[n+d];
+X
+X	for( i=n+d-1; i>n; i-- )
+X		yd = z * yd  +  param[i];
+X	}
+else
+/* There is no denominator. */
+X	yd = 1.0;
+X
+if( config & XPX )
+X	yn = yn * gx;
+if( config & X2PX )
+X	yn = yn * gx * gx;
+if( config & PADE )
+X	{ /* 2P/(Q-P) */
+X	yd = yd - yn;
+X	yn = 2.0 * yn;
+X	}
+qyaprx = yn/yd;
+if( config & CW )
+X	qyaprx = gx + qyaprx * gx * gx;
+if( config & SPECIAL )
+X	qyaprx = speci( qyaprx, gx );
+return( qyaprx );
+}
+X
+X
+X
+/* Subroutine to compute approximation error at x */
+X
+double geterr(x)
+double x;
+{
+double e, f;
+double fabs(), approx(), func();
+X
+f = func(x);
+e = approx(x) - f;
+if( relerr )
+X	{
+X	if( f != 0.0 )
+X		e /= f;
+X	}
+if( e < 0.0 )
+X	{
+X	esign = -1;
+X	e = -e;
+X	}
+else
+X	esign = 1;
+X
+return(e);
+}
+X
+X
+X
+/* Subroutine for special argument transformations */
+X
+double gofx(x)
+double x;
+{
+X
+return x;
+}
+X
+/* Routine for special modifications of the approximating form.
+X * Example already provided by the CW flag: 
+X *	y(1+dev) = gx + gx^2 R(gx)
+X * would change y to
+X *	R(gx) = (y - gx)/(gx*gx)
+X * This function is called from remese.c.
+X *
+X * An inverse routine called speci() must also be supplied.
+X * This finds y from R and gx (see below).
+X */
+extern double PI, PIO4, THPIO4;
+#define SQTPI 2.50662827463100050242
+#define JO1 14.6819706421238932572
+#define YO1  4.66539330185668857532
+X
+X
+X
+double special( y, gx )
+double y, gx;
+{
+double a = 0.0;
+X
+#if SPEC1
+/* exponential, y = exp(x) = 1 + x + .5x^2 + x^2 R(x) */
+double b;
+if( gx == 0.0 )
+X	return(1.0);
+b = gx * gx;
+a = (y - 1.0 - gx - .5*b)/b;
+#endif
+X
+#if SPEC2
+/* y = exp2(x) = 1 + x R(x) */
+a = y - 1.0;
+#endif
+X
+#if SPEC3
+/* y = log gamma(x) = q(x) + 1/x P(1/x^2)
+X * configufation is SQH | ZER | XPX | PXSQ | SPECIAL
+X */
+double b;
+double log();
+b = 1.0/gx;
+b = ( b - 0.5 ) * log(b) - b + LS2PI;
+a = y - b;
+#endif
+X
+#if SPEC4
+/* y = gamma(x) = sqrt(2 pi) x^(x-.5) exp(-x) (1 + 1/x P(1/x)) */
+double b;
+double pow(), exp();
+b = 1.0/gx;
+a = SQTPI * pow( b, b-0.5 ) * exp(-b);
+a = (y - a)/a;
+#endif
+#if SPEC5
+/* Nothing special. */
+#endif
+#if SPEC6
+/* Nothing special. */
+#endif
+#if SPEC7
+/* y = j0(x) = (x^2 - JZ1)(x^2-JZ2)(x^2-JZ3)P(x^2) */
+double b;
+b=gx*gx;
+a = (b-JZ1)*(b-JZ2)*(b-JZ3);
+a = y/a;
+#endif
+#if SPEC8
+/* Nothing special. */
+#endif
+#if SPEC9
+/* y = j1(x) = (x^2 - JZ11)(x^2-JZ12)(x^2-JZ13)P(x^2) */
+double b;
+b=gx*gx;
+a = (b-JZ11)*(b-JZ12)*(b-JZ13);
+a = y/a;
+#endif
+#if SPEC10
+/* Nothing special. */
+#endif
+#if SPEC11
+/* y = y0(x) = TWOOPI * log(x) * j0(x) + (x^2-YZ1)*P(x^2) */
+/*double b;*/
+double log(), j0();
+/*b=gx*gx;*/
+a = y - TWOOPI * log(gx) * j0(gx);
+/*a /= (b-YZ1)*(b-YZ2)*(b-YZ3);*/
+#endif
+#if SPEC12
+double b;
+b = gx;
+a = y / ((b-YZ1)*(b-YZ2)*(b-YZ3)*(b-YZ4));
+#endif
+#if SPEC13
+/* y = y1(x) = TWOOPI * (log(x) * j1(x) - 1/x) + R(x^2) */
+double log(), j1();
+a = y - TWOOPI * ( j1(gx) * log(gx)  -  1.0/gx );
+#endif
+#if SPEC14
+double b;
+b = gx;
+a = y / ((b-Y1Z1)*(b-Y1Z2)*(b-Y1Z3)*(b-Y1Z4));
+#endif
+#if SPEC15
+/* Nothing special. */
+#endif
+#if SPEC16
+/* y = erfc(x) = exp(-x^2) P(x) */
+double exp();
+double b;
+b = 1.0/(gx*gx);
+a = y * exp(b);
+#endif
+X
+/* y = cos(x) = 1 - .5 x^2 + x^2 x^2 P(x^2) */
+/*
+b = gx * gx;
+a = (y - 1.0 + 0.5*b)/b;
+*/
+X
+/* logarithm, y = log(1+x) = x - .5x^2 + x^2 * (xP(x))
+X * configuration is  ZER | XPX | SPECIAL
+X */
+/*
+if( gx == 0.0 )
+X	return(0.0);
+b = gx * gx;
+a = (y - gx + 0.5 * b)/b;
+*/
+X
+X
+X
+/* acosh() */
+/*
+if( gx == 0.0 )
+X	return(0.0);
+a = y/(2.0*sqrt(gx));
+*/
+return( a );
+}
+X
+X
+X
+double speci( R, gx )
+double R, gx;
+{
+double y =0.0;
+X
+#if SPEC1
+/* exponential, y = exp(x) = 1 + x + .5x^2 + x^2 R(x) */
+double b;
+b = gx * gx;
+y = 1.0 + gx + .5 * b;
+y = y + b * R;
+#endif
+X
+#if SPEC2
+/* y = exp2(x) = 1 + x R(x) */
+y = R + 1.0;
+#endif
+X
+#if SPEC3
+/* y = log gamma(x) = q(x) + 1/x P(1/x^2) */
+double b;
+double log();
+b = 1.0/gx;
+b = ( b - 0.5 ) * log(b) - b + LS2PI;
+y = b + R;
+#endif
+X
+#if SPEC4
+/* y = gamma(x) = sqrt(2 pi) x^(x-.5) exp(-x) (1 + 1/x P(1/x)) */
+double b;
+double pow(), exp();
+b = 1.0/gx;
+b = SQTPI * pow( b, b-0.5 ) * exp(-b);
+y = b + b * R;
+#endif
+#if SPEC5
+/* Nothing special. */
+#endif
+#if SPEC6
+/* Nothing special. */
+#endif
+#if SPEC7
+/* y = j0(x) = (x^2 - JZ1)(x^2-JZ2)(x^2-JZ3)P(x^2) */
+double b;
+b=gx*gx;
+y = (b-JZ1)*(b-JZ2)*(b-JZ3)*R;
+#endif
+#if SPEC8
+/* Nothing special. */
+#endif
+#if SPEC9
+/* y = j1(x) = (x^2 - JZ11)(x^2-JZ12)(x^2-JZ13)P(x^2) */
+double b;
+b=gx*gx;
+y = (b-JZ11)*(b-JZ12)*(b-JZ13)*R;
+#endif
+#if SPEC10
+/* Nothing special. */
+#endif
+#if SPEC11
+/* y = y0(x) = TWOOPI * log(x) * j0(x) + (x^2-YZ1)*P(x^2) */
+/*double b;*/
+double log(), j0();
+/*b=gx*gx;*/
+y = TWOOPI * log(gx) * j0(gx) + R; /*(b-YZ1)*(b-YZ2)*(b-YZ3)*R;*/
+#endif
+#if SPEC12
+double b;
+b = gx * gx;
+y = (b-YZ1)*(b-YZ2)*(b-YZ3)*(b-YZ4)*R;
+#endif
+#if SPEC13
+/* y = y1(x) = TWOOPI * (log(x) * j1(x) - 1/x) + R(x^2) */
+double log(), j1();
+y =  TWOOPI * ( j1(gx) * log(gx)  -  1.0/gx ) + R;
+#endif
+#if SPEC14
+double b;
+b = gx;
+y = (b-Y1Z1)*(b-Y1Z2)*(b-Y1Z3)*(b-Y1Z4)*R;
+#endif
+#if SPEC15
+/* Nothing special. */
+#endif
+#if SPEC16
+/* y = erfc(x) = exp(-x^2) P(x) */
+double exp();
+double b;
+b = -1.0/(gx*gx);
+y = exp(b) * R;
+#endif
+X
+/* y = cos(x) = 1 - .5 x^2 +  x^2 x^2 R(x^2) */
+/*
+b = gx * gx;
+y = 1.0 - 0.5*b + b * R;
+*/
+X
+/* log(1+x) = x - .5x^2 + x^2 xR(x) */
+/*
+b = gx * gx;
+y = gx  - 0.5 * b  +  b * R;
+*/
+X
+X
+X
+X
+/* y = erfc(x) = exp(-x^2) P(x) */
+/*y = exp( -gx * gx ) * R;*/
+X
+/*y = 2.0 * sqrt(gx) * R;*/
+return( y );
+}
+X
+/* Put here an accurate routine */
+/* for the function to be approximated. */
+#if 0
+static int fflg = 0;
+static double ff = 0.0;
+#endif
+X
+double func(x)
+double x;
+{
+double y;
+/*double xx, y, t, u, s, c;*/
+X
+#if SPEC1
+double exp();
+/* exponential, y = exp(x) = 1 + x + .5x^2 + x^2 R(x) */
+y = exp(x);
+#endif
+X
+#if SPEC2
+double exp2();
+y = exp2(x);
+#endif
+X
+#if SPEC3
+double lgam();
+y = lgam(1.0/x);
+#endif
+X
+#if SPEC4
+double gamma();
+y = gamma(1.0/x);
+#endif
+X
+#if SPEC5
+/* Bessel, phase */
+double xx, t;
+double j0(), y0(), floor(), atan();
+if( x == 0.0 )
+X  {
+X    qx = 0.0;
+X    qy = 0.0;
+X    return(0.0);
+X  }
+xx = 1.0/x;
+y = j0(xx);
+t = y0(xx);
+y = atan(t/y);
+t = xx - PIO4;
+t = t - PI * floor(t/PI + 0.5);
+y -= t;
+if( y > 0.5*PI )
+X	y -= PI;
+if( y < -0.5*PI )
+X	y += PI;
+#endif
+X
+#if SPEC6
+/* Bessel, modulus */
+double t, u, xx;
+double j0(), y0(), sqrt();
+xx =1.0/(x);
+t = j0(xx);
+u = y0(xx);
+y = t*t + u*u;
+#endif
+#if SPEC7
+double j0();
+y  = j0(x);
+#endif
+#if SPEC8
+/* Bes1, modulus */
+double t, u, xx;
+double j1(), y1(), sqrt();
+xx =1.0/(x*x);
+t = j1(xx);
+u = y1(xx);
+y = sqrt(t*t + u*u);
+#endif
+#if SPEC9
+double j1();
+y  = j1(x);
+#endif
+#if SPEC10
+/* bes1, phase */
+double xx, t;
+double j0(), y0(), floor(), atan();
+if( x == 0.0 )
+X  {
+X    qx = 0.0;
+X    qy = 0.0;
+X    return(0.0);
+X  }
+xx = 1.0/x;
+y = j1(xx);
+t = y1(xx);
+y = atan(t/y);
+t = xx - THPIO4;
+t = t - PI * floor(t/PI + 0.5);
+y -= t;
+if( y > 0.5*PI )
+X	y -= PI;
+if( y < -0.5*PI )
+X	y += PI;
+#endif
+#if SPEC11 || SPEC12
+double y0();
+y = y0(x);
+#endif
+#if SPEC13 || SPEC14
+double y1();
+y = y1(x);
+#endif
+#if SPEC15
+double erf();
+y = erf(x);
+#endif
+#if SPEC16
+double erfc();
+y = erfc(1.0/x);
+#endif
+X
+qx = x;
+X
+#if 0
+if( fflg == 0 )
+X	{
+X	fflg = 1;
+X	ff = 10.0 * log10(2.0);
+X	}
+X
+if( x == 0.0 )
+X	{
+X	y = ff;
+X	y = 0.0;
+X	qy = y;
+X	return y;
+X	}
+#endif
+X
+X
+/*
+xx = 32.0 * x;
+t = 1.0 + exp10( -xx/10.0 );
+y = 10.0 * log10(t);
+*/
+X
+#if 0
+/* R = 1 - u^2 P(u^2), u = 1/(pi x^2) */
+xx = 1.0/sqrt(PI*x);
+fresnl( xx, &s, &c );
+/* pi/2 x^2 = pi/2 1/(pi u) */
+t = 0.5*PI*xx*xx;
+/*y = (0.5-s) * cos(t) - (0.5-c) * sin(t);*/
+y = (0.5-c) * cos(t) + (0.5-s) * sin(t);
+y = y*PI*xx;
+#endif
+X
+/*
+y = exp( lx( exp(x) ) - 1.0 ) - 1.0;
+*/
+/*
+y = 1.0/sqrt(x);
+*/
+X
+qy = y;
+return( y );
+}
+SHAR_EOF
+chmod 0600 remesf.c ||
+echo 'restore of remesf.c failed'
+Wc_c="`wc -c < 'remesf.c'`"
+test 10882 -eq "$Wc_c" ||
+	echo 'remesf.c: original size 10882, current size' "$Wc_c"
+fi
+# ============= remesg.c ==============
+if test -f 'remesg.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping remesg.c (File already exists)'
+else
+echo 'x - extracting remesg.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remesg.c' &&
+/* remesg.c */
+/* Global symbol declarations for Remes program */
+X
+#include "remes.h"
+X
+int IPS[P] = {0,};         /* simq() work vector */
+double AA[P*P] = {0.0,};   /* coefficient matrix */
+double BB[P] = {0.0,};     /* right hand side vector */
+double param[P] = {0.0,};  /* solution vector */
+double xx[P] = {0.0,};     /* points in approximation interval */
+double mm[P] = {0.0};      /* points of maximum deviation */
+double yy[P] = {0.0};      /* the error maxima */
+double step[P] = {0.0};    /* step sizes for searching */
+double qx = 0.0;           /* function argument */
+double qy = 0.0;           /* accurate function value */
+double qyaprx = 0.0;       /* approximate function value */
+double dev = 0.0;          /* deviation at solution points */
+double apstrt = 0.0;       /* start of approximation interval */
+double apwidt = 0.0;       /* width of interval */
+double apend = 0.0;        /* end of interval */
+double xm = 0.0;           /* variables for search of maximum */
+double xn = 0.0;
+double ym = 0.0;
+double yn = 0.0;
+double delta = 0.0;
+double eclose = 0.0;
+double farther = 0.0;
+double spread = 0.0;      /* error spread from last iteration */
+int esign = 0;            /* sign of error returned by geterr */
+int n = 0;                /* degree of numerator polynomial */
+int d = 0;                /* degree of denominator polynomial */
+int nd1 = 0;              /* n + d + 1 */
+int neq = 0;              /* number of equations to solve */
+int relerr = 0;           /* relative error criterion flag */
+int search = 0;           /* flag for automatic search */
+int iter = 0;             /* search-solve iteration number */
+int askitr = 0;           /* iteration on which to stop */
+SHAR_EOF
+chmod 0600 remesg.c ||
+echo 'restore of remesg.c failed'
+Wc_c="`wc -c < 'remesg.c'`"
+test 1707 -eq "$Wc_c" ||
+	echo 'remesg.c: original size 1707, current size' "$Wc_c"
+fi
+# ============= remesp.c ==============
+if test -f 'remesp.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping remesp.c (File already exists)'
+else
+echo 'x - extracting remesp.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remesp.c' &&
+/* remesp.c */
+X
+#include <stdio.h>
+#include "remes.h"
+X
+/* Display solution and tabulate errors */
+X
+void remesp()
+{
+int i, j, k, ip;
+double a, b, x, y, z, xm, ym;
+double approx(), func(), geterr();
+X
+j = 0;	/* Printout variable */
+ip = 0;	/* Solution vector counter */
+printf( "Numerator coefficients:\n" );
+for( i=0; i<=n; i++, j++, ip++ )
+X	{
+X	if( j >= 3 )
+X		{
+X		printf( "\n" );
+X		j = 0;
+X		}
+X	printf( "%23.15E ", param[ip] );
+X	}
+if( d > 0 )
+X	{
+X	j = 0;
+X	printf( "\nDenominator coefficients:\n" );
+X	for( i=0; i<d; i++, j++, ip++ )
+X		{
+X		if( j >= 3 )
+X			{
+X			printf( "\n" );
+X			j = 0;
+X			}
+X		printf( "%23.15E ", param[ip] );
+X		}
+X	if( j >= 3 )
+X		printf( "\n" );
+/* Leading denominator coefficient always = 1. */
+X	printf( "%9.1E", 1.0 );
+X	}
+else
+X	printf( "\nDeviation: %.4E", param[n+1] );
+X
+/* Display table of function and approximation error. */
+printf(
+"\n\n     x         func      approx      error\n"
+);
+a = apwidt/N;
+b = apstrt;
+k = 0;
+j = 0;
+for( i=0; i<=N; i++ )
+X	{
+X	x = b + i * a;
+X	if( x >= mm[k] )
+X		{
+X		xm = mm[k];
+X		y = geterr(xm);
+X		z = qyaprx;
+X		ym = qy;
+X		printf( "%11.3E %11.3E %11.3E %11.3E*\n",
+X			xm, ym, z, y*esign );
+X		k += 1;
+X		} 
+/* Fill in the zeros also. */
+X	if( (d > 0) && (x >= xx[j]) )
+X		{
+X		xm = xx[j];
+X		y = geterr(xm);
+X		z = qyaprx;
+X		ym = qy;
+X		printf( "%11.3E %11.3E %11.3E %11.3Eo\n",
+X			 xm, ym, z, y*esign );
+X		j += 1;
+X		} 
+X	y = geterr(x);
+X	z = qyaprx;
+X	ym = qy;
+X	printf( "%11.3E %11.3E %11.3E %11.3E\n",
+X		x, ym, z, y*esign );
+X	}
+}
+SHAR_EOF
+chmod 0600 remesp.c ||
+echo 'restore of remesp.c failed'
+Wc_c="`wc -c < 'remesp.c'`"
+test 1464 -eq "$Wc_c" ||
+	echo 'remesp.c: original size 1464, current size' "$Wc_c"
+fi
+# ============= remess.c ==============
+if test -f 'remess.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping remess.c (File already exists)'
+else
+echo 'x - extracting remess.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remess.c' &&
+/* remess.c */
+#include <stdio.h>
+#include "remes.h"
+X
+/* Search subroutine */
+X
+void remess()
+{
+double a, q, xm, ym, xn, yn, xx0, xx1;
+int i, j, meq, emsign, ensign, steps;
+double approx(), func(), geterr();
+X
+/* Search for maxima of error */
+eclose = 1e30;
+farther = 0.0;
+j = 0;
+meq = neq;
+X
+if( (d > 0) || ((config & ZER) != 0) )
+X	{
+X	j = 1;
+X	meq += 1;
+X	}
+xx0 = apstrt;
+X
+for( i=0; i<meq; i++ )
+X	{
+X	steps = 0;
+X	if( (d > 0) || ((config & ZER) != 0) )
+X		xx1 = xx[i]; /* Next zero */
+X	else
+X		xx1 = mm[i+1]; /* Next maximum */
+X	if( i == meq-1 )
+X		xx1 = apend;
+X	xm = mm[i];
+X	ym = geterr(xm);
+X	emsign = esign; /* Sign of error */
+X	q = step[i];
+X	xn = xm + q;
+/* Cannot skip over adjacent boundaries */
+X	if( xn < xx0 )
+X		goto revers;
+X	if( xn >= xx1 )
+X		goto revers;
+X	yn = geterr(xn);
+X	ensign = esign;
+X	if( yn < ym )
+X		{
+revers:
+X		q = -q;
+X		xn = xm;
+X		yn = ym;
+X		ensign = emsign;
+X		}
+X
+/* March until error becomes smaller. */
+X
+X	while( yn >= ym )
+X		{
+X		if( ++steps > 10 )
+X			goto tsear;
+X		ym = yn;
+X		xm = xn;
+X		emsign = ensign;
+X		a = xm + q;
+X		if( a == xm )
+X			goto tsear;
+/* Must not skip over the zeros either side. */
+X		if( a <= xx0 )
+X			goto tsear;
+X		if( a >= xx1 )
+X			goto tsear;
+X		xn = a;
+X		yn = geterr(xn);
+X		ensign = esign;
+X		}
+X
+tsear:
+X	mm[i] = xm; /* Position of maximum */
+X	yy[i] = ym; /* Value of maximum */
+X
+X	if( ym == 0.0 )
+X		printf( "yy[%d] = 0\n", i );
+X	if( eclose > ym )
+X		eclose = ym;
+X
+X	if( farther < ym )
+X		farther = ym;
+X
+X /* No denominator */
+X	if( (d == 0) && ((config & ZER) == 0) )
+X		xx[i] = xm;
+/* Walk to next zero. */
+X	if( (d > 0) || ((config & ZER) != 0) )
+X		xx0 = xx1;
+X	else
+X		xx0 = 0.5*(xm + xx1);
+X	} /* end of search loop */
+X
+X
+/* Decrease step size if error spread increased. */
+q = (farther - eclose);
+/* Relative error spread */
+if( eclose != 0.0 )
+X	q /= eclose;
+if( q >= spread )
+X	{ /* Spread is increasing; decrease step size. */
+X	if( config & TRUNC )
+X		delta *= 0.875;
+X	else
+X		delta *= 0.5;
+X	printf( "delta = %.4E\n", delta );
+X	}
+X spread = q;
+X
+printf( "peak error = %.4E, relative error spread = %.4E\n",
+X		farther, spread );
+X
+/* Calculate new step sizes */
+X
+if( (d == 0) && ((config & ZER) == 0) )
+X	{
+X	if( spread < 0.25 )
+X		q = 0.0625;
+X	else
+X		q = 0.5;
+X
+X	for( i=0; i<neq; i++ )
+X		step[i] *= q;
+X	}
+else
+X	{
+X
+X	for( i=0; i<neq; i++ )
+X		{
+X		q = yy[i+1];
+X		if( q != 0.0 )
+X			q = yy[i]/q  - 1.0;
+X		else
+X			q = 0.0625;
+X		if( q > 0.25 )
+X			q = 0.25;
+X		q *= mm[i+1] - mm[i];
+X		step[i] = q * delta;
+X		}
+X	step[neq] = step[neq-1];
+X
+X
+/* Insert new locations for the zeros. */
+X	for( i=0; i<neq; i++ )
+X		{
+X		xm = xx[i] - step[i];
+X		if( xm <= apstrt )
+X			continue;
+X		if( xm >= apend )
+X			continue;
+X		if( xm <= mm[i] )
+X			{
+X			printf( "xx[%d] < mm\n", i );
+X			xm = 0.5 * (mm[i] + xx[i]);
+X			}
+X		if( xm >= mm[i+1] )
+X			{
+X			printf( "xx[%d] > mm\n", i );
+X			xm = 0.5 * (mm[i+1] + xx[i]);
+X			}
+X		xx[i] = xm;
+X		}
+X	}
+}
+SHAR_EOF
+chmod 0600 remess.c ||
+echo 'restore of remess.c failed'
+Wc_c="`wc -c < 'remess.c'`"
+test 2817 -eq "$Wc_c" ||
+	echo 'remess.c: original size 2817, current size' "$Wc_c"
+fi
+# ============= remesw.c ==============
+if test -f 'remesw.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping remesw.c (File already exists)'
+else
+echo 'x - extracting remesw.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'remesw.c' &&
+/* remesw.c */
+X
+/* Write answers to disc file. */
+X
+#include <stdio.h>
+#include "remes.h"
+X
+void remesw()
+{
+char s[40];
+int i;
+FILE *f, *fopen();
+double log10();
+X
+reopn:
+X
+printf( "Log file name ? " );
+gets(s);
+f = fopen( s, "w" );
+if( f == 0 )
+X	{
+X	printf( "Can't open %s\n", s );
+X	goto reopn;
+X	}
+X
+fprintf( f, "\n%s  ", funnam );
+if( config & CW )
+X	fprintf( f, "x + x**2 * " );
+if( config & XPX )
+X	fprintf( f, "z  " );
+if( config & X2PX )
+X	fprintf( f, "z**2  " );
+if( config & PXCU )
+X	fprintf( f, "P(z**3)" );
+else if( config & PXSQ )
+X	fprintf( f, "P(z**2)" );
+else
+X	fprintf( f, "P(z)" );
+if( d > 0 )
+X	{
+X	if( config & PXCU )
+X		fprintf( f, "/Q(z**2)" );
+X	else if( config & PXSQ )
+X		fprintf( f, "/Q(z**2)" );
+X	else
+X		fprintf( f, "/Q(z)" );
+X	}
+fprintf( f, "\nz(x) = %s\n", znam );
+if( relerr )
+X	fprintf( f, "Relative error\n" );
+else
+X	fprintf( f, "Absolute error\n" );
+X
+fprintf( f, "n = %d, d = %d\n", n, d );
+fprintf( f, "precision = %23.15E  ", -log10(farther) );
+fprintf( f, "error=%23.15E\n", farther );
+fprintf( f, "leveled=%23.4E\n", spread );
+fprintf( f, "\nNumerator:\n" );
+for( i=0; i<n+d+1; i++ )
+X	{
+X	if( i == n+1 )
+X		fprintf( f, "\nDenominator\n" );
+X	fprintf( f, "%23.15E\n", param[i] );
+X	}
+X
+if( d > 0 )
+X	fprintf( f, "%23.15E\n", 1.0 );
+X
+if( (d > 0) || ((config & ZER) != 0) )
+X	{
+X	fprintf( f, "\n Locations of zero error:\n" );
+X	for( i=0; i<=n+d; i++ )
+X		fprintf( f, "%23.15E\n", xx[i] );
+X	}
+X
+fprintf( f, "\n Locations of peak error:\n" );
+for( i=0; i<=n+d+1; i++ )
+X	fprintf( f, "%23.15E\n", mm[i] );
+fclose(f);
+}
+SHAR_EOF
+chmod 0600 remesw.c ||
+echo 'restore of remesw.c failed'
+Wc_c="`wc -c < 'remesw.c'`"
+test 1519 -eq "$Wc_c" ||
+	echo 'remesw.c: original size 1519, current size' "$Wc_c"
+fi
+# ============= simq.c ==============
+if test -f 'simq.c' -a X"$1" != X"-c"; then
+	echo 'x - skipping simq.c (File already exists)'
+else
+echo 'x - extracting simq.c (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'simq.c' &&
+/*							simq.c
+X *
+X *	Solution of simultaneous linear equations AX = B
+X *	by Gaussian elimination with partial pivoting
+X *
+X *
+X *
+X * SYNOPSIS:
+X *
+X * double A[n*n], B[n], X[n];
+X * int n, flag;
+X * int IPS[];
+X * int simq();
+X *
+X * ercode = simq( A, B, X, n, flag, IPS );
+X *
+X *
+X *
+X * DESCRIPTION:
+X *
+X * B, X, IPS are vectors of length n.
+X * A is an n x n matrix (i.e., a vector of length n*n),
+X * stored row-wise: that is, A(i,j) = A[ij],
+X * where ij = i*n + j, which is the transpose of the normal
+X * column-wise storage.
+X *
+X * The contents of matrix A are destroyed.
+X *
+X * Set flag=0 to solve.
+X * Set flag=-1 to do a new back substitution for different B vector
+X * using the same A matrix previously reduced when flag=0.
+X *
+X * The routine returns nonzero on error; messages are printed.
+X *
+X *
+X * ACCURACY:
+X *
+X * Depends on the conditioning (range of eigenvalues) of matrix A.
+X *
+X *
+X * REFERENCE:
+X *
+X * Computer Solution of Linear Algebraic Systems,
+X * by George E. Forsythe and Cleve B. Moler; Prentice-Hall, 1967.
+X *
+X */
+X
+/*							simq	2 */
+X
+#include <stdio.h>
+X
+int simq( A, B, X, n, flag, IPS )
+double A[], B[], X[];
+int n, flag;
+int IPS[];
+{
+int i, j, ij, ip, ipj, ipk, ipn;
+int idxpiv, iback;
+int k, kp, kp1, kpk, kpn;
+int nip, nkp, nm1;
+double em, q, rownrm, big, size, pivot, sum;
+double fabs();
+X
+nm1 = n-1;
+if( flag < 0 )
+X	goto solve;
+X
+/*	Initialize IPS and X	*/
+X
+ij=0;
+for( i=0; i<n; i++ )
+X	{
+X	IPS[i] = i;
+X	rownrm = 0.0;
+X	for( j=0; j<n; j++ )
+X		{
+X		q = fabs( A[ij] );
+X		if( rownrm < q )
+X			rownrm = q;
+X		++ij;
+X		}
+X	if( rownrm == 0.0 )
+X		{
+X		printf("SIMQ ROWNRM=0");
+X		return(1);
+X		}
+X	X[i] = 1.0/rownrm;
+X	}
+X
+/*							simq	3 */
+/*	Gaussian elimination with partial pivoting 	*/
+X
+for( k=0; k<nm1; k++ )
+X	{
+X	big= 0.0;
+X	idxpiv = 0;
+X	for( i=k; i<n; i++ )
+X		{
+X		ip = IPS[i];
+X		ipk = n*ip + k;
+X		size = fabs( A[ipk] ) * X[ip];
+X		if( size > big )
+X			{
+X			big = size;
+X			idxpiv = i;
+X			}
+X		}
+X
+X	if( big == 0.0 )
+X		{
+X		printf( "SIMQ BIG=0" );
+X		return(2);
+X		}
+X	if( idxpiv != k )
+X		{
+X		j = IPS[k];
+X		IPS[k] = IPS[idxpiv];
+X		IPS[idxpiv] = j;
+X		}
+X	kp = IPS[k];
+X	kpk = n*kp + k;
+X	pivot = A[kpk];
+X	kp1 = k+1;
+X	for( i=kp1; i<n; i++ )
+X		{
+X		ip = IPS[i];
+X		ipk = n*ip + k;
+X		em = -A[ipk]/pivot;
+X		A[ipk] = -em;
+X		nip = n*ip;
+X		nkp = n*kp;
+X		for( j=kp1; j<n; j++ )
+X			{
+X			ipj = nip + j;
+X			A[ipj] = A[ipj] + em * A[nkp + j];
+X			}
+X		}
+X	}
+kpn = n * IPS[n-1] + n - 1;	/* last element of IPS[n] th row */
+if( A[kpn] == 0.0 )
+X	{
+X	printf( "SIMQ A[kpn]=0");
+X	return(3);
+X	}
+X
+/*							simq 4 */
+/*	back substitution	*/
+X
+solve:
+ip = IPS[0];
+XX[0] = B[ip];
+for( i=1; i<n; i++ )
+X	{
+X	ip = IPS[i];
+X	ipj = n * ip;
+X	sum = 0.0;
+X	for( j=0; j<i; j++ )
+X		{
+X		sum += A[ipj] * X[j];
+X		++ipj;
+X		}
+X	X[i] = B[ip] - sum;
+X	}
+X
+ipn = n * IPS[n-1] + n - 1;
+XX[n-1] = X[n-1]/A[ipn];
+X
+for( iback=1; iback<n; iback++ )
+X	{
+/* i goes (n-1),...,1	*/
+X	i = nm1 - iback;
+X	ip = IPS[i];
+X	nip = n*ip;
+X	sum = 0.0;
+X	for( j=i+1; j<n; j++ )
+X		sum += A[nip+j] * X[j];
+X	X[i] = (X[i] - sum)/A[nip+i];
+X	}
+return(0);
+}
+SHAR_EOF
+chmod 0600 simq.c ||
+echo 'restore of simq.c failed'
+Wc_c="`wc -c < 'simq.c'`"
+test 2953 -eq "$Wc_c" ||
+	echo 'simq.c: original size 2953, current size' "$Wc_c"
+fi
+# ============= unix.mak ==============
+if test -f 'unix.mak' -a X"$1" != X"-c"; then
+	echo 'x - skipping unix.mak (File already exists)'
+else
+echo 'x - extracting unix.mak (Text)'
+sed 's/^X//' << 'SHAR_EOF' > 'unix.mak' &&
+# Unix make file for remes.exe
+CC= gcc
+INCS= remes.h
+CFLAGS= -O2 -Wall
+OBJS= remes.o remesa.o remese.o remesf.o remesg.o remesp.o \
+remess.o remesw.o simq.o
+X
+remes: $(OBJS) $(INCS)
+X	$(CC) $(OBJS) -o remes -lm
+X
+SHAR_EOF
+chmod 0600 unix.mak ||
+echo 'restore of unix.mak failed'
+Wc_c="`wc -c < 'unix.mak'`"
+test 210 -eq "$Wc_c" ||
+	echo 'unix.mak: original size 210, current size' "$Wc_c"
+fi
+exit 0

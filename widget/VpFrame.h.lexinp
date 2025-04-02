@@ -1,0 +1,115 @@
+/*
+ * $Id: VpFrame.h.lexinp,v 1.2 2000/06/24 20:38:49 till Exp $
+ */
+
+#ifdef THISISACOMMENT
+ *
+ * The VpFrame Widget
+ *
+ *  Copyright (C) 1997  by Till Straumann   <strauman@sun6hft.ee.tu-berlin.de>
+
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Library Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Library Public License for more details.
+
+ *  You should have received a copy of the GNU General Library Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ *
+ * This widget provides 3d look to the viewport widget.
+ * A ThreeD widget creates an additional subwindow which
+ * is used as the actual clip window. The threeD itself
+ * is used to draw the shadows.
+ * 
+ * Reparent notify events are intercepted to 'rereparent' the
+ * clipped window (the viewport child that can be scrolled).
+ *
+ * a resource 'embossed' is provided to control the appearance,
+ * i.e. the viewport child appears embossed if this resource is
+ * set true (default).
+ *
+ * If you can modify the 'Viewport' code, look for the line
+ * where the 'clip' widget is created and substitute 'widgetClass'
+ * for 'vpFrameWidgetClass'. An include directive 
+ *
+ * #include "VpFrame.h"
+ * 
+ * has to be inserted also.
+ *
+ * As an alternative, the hack as follows may be used when creating
+ * an instance of viewport:
+ *
+ * WidgetClass hack=widgetClass;
+ * Widget      viewport;
+ * 
+ * /* make the viewport code get a widget of class 'VpFrameWidgetClass'
+ *  * when it creates its 'clip' child
+ *  */
+ * widgetClass=vpFrameWidgetClass;
+ * viewport=XtCreateManagedWidget("",....);
+ * /* reinstall the original widget class */
+ * widgetClass=hack;
+ *
+
+ * $Log: VpFrame.h.lexinp,v $
+ * Revision 1.2  2000/06/24 20:38:49  till
+ *  - leave VpFrame in the library; just comment out everything ifndef XAW3D
+ *
+ * Revision 1.1  1999/10/18 22:37:57  cvs
+ *  - Imakefile supports building a (static) library now.
+ *  - all (resource etc.) strings go to strDefs.c if SEPARATE_STRINGS is defined.
+ *
+ * Revision 1.3  1998/05/02 19:56:38  till
+ * extending 'ifdef-style' comment
+ *
+ * Revision 1.2  1998/05/02 16:37:25  till
+ * comment contained a /* comment */; replaced outer /**/ by ifdef
+ *
+ * Revision 1.1  1998/05/02 15:06:41  till
+ * added many comments and usage info
+ * renamed to VpFrameWidgetClass to avoid possible name clashes
+ *
+#endif /* THISISACOMMENT */
+
+#ifndef _VpFrame_h
+#define _VpFrame_h
+
+#ifndef XAW3D
+#define vpFrameWidgetClass widgetClass;
+#else
+
+/***********************************************************************
+ *
+ * VpFrame Widget
+ *
+ ***********************************************************************/
+
+
+/* Parameters:
+
+ Name                 Class              RepType         Default Value
+ ----                 -----              -------         -------------
+ XtNembossed		XtCEmbossed	XtRBoolean	True
+ XtNunrealizeCallback	XtCCallback	XtRCallback	NULL
+
+*/
+
+typedef struct _VpFrameRec *VpFrameWidget;
+typedef struct _VpFrameClassRec *VpFrameWidgetClass;
+
+extern WidgetClass vpFrameWidgetClass;
+
+##DOSCAN##XtNembossed
+##DOSCAN##XtCEmbossed
+
+#endif /* ifdef XAW3D */
+
+#endif /* _VpFrame_h */
+/* DON'T ADD STUFF AFTER THIS #endif */

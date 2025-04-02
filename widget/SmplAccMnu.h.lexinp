@@ -1,0 +1,69 @@
+/*
+ * $Id: SmplAccMnu.h.lexinp,v 1.1 1999/10/18 22:37:57 cvs Exp $
+ *
+Copyright (c) 1999 Till Straumann
+
+ * Author:  Till Straumann
+ */
+
+/*
+ * SmplAccMnu.h - Public Header file for SimpleAccMenu widget.
+ *
+ * This is the public header file for the SimpleAccMenu widget.
+ * It is a subclass of Athena's SimpleMenu which adds Support for
+ * accelerators / displaying accelerators.
+ *
+ * Date:    Oct, 1999
+ *
+ * By:      Till Straumann
+ */
+
+#ifndef _SimpleAccMenu_h
+#define _SimpleAccMenu_h
+
+#include <X11/Shell.h>
+#include <X11/Xmu/Converters.h>
+
+/****************************************************************
+ *
+ * SimpleAccMenu widget
+ *
+ ****************************************************************/
+
+/* SimpleAccMenu Resources:
+
+ Name		     Class		RepType		Default Value
+ ----		     -----		-------		-------------
+ userData		 UserData   XtPointer	NULL
+
+*/
+
+##DOSCAN##XtNuserData
+##DOSCAN##XtCUserData
+
+typedef struct _SimpleAccMenuClassRec*	SimpleAccMenuWidgetClass;
+typedef struct _SimpleAccMenuRec*		SimpleAccMenuWidget;
+
+extern WidgetClass simpleAccMenuWidgetClass;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* install all accelerators of SAccmeBSB entry object children to the
+ * destination widget.
+ * NOTE: source must be a SmplAccMenu widget
+ */
+void
+Xaw3dInstallAllSmnuAccelerators(
+#if NeedFunctionPrototypes
+Widget destination,
+Widget source
+#endif
+);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _SimpleMenu_h */
