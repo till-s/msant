@@ -25,7 +25,7 @@ MULT_OR_ITER = -DDIREKT
 
 CSOURCE = CBstrom.c Malloc.c PBuffer.c basics.c calc.c feld.c fileop.c\
 	  graf.c intr.c lists.c msant_strings.c nahkop.c punkte.c\
-	  $(CREATEICONWIN) fixed_strings.c
+	  $(CREATEICONWIN) fixed_strings.c popup.c widglist.c
 
 FSOURCE = 
 

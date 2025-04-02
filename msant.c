@@ -10,7 +10,7 @@
 #include "datei_ui.h"
 #include "calc_ui.h"
 
-#include "pinpop.h"
+#include "xawutils/pinpop.h"
 
 #include "popup.h"
 #include "common/msant_strings.h"

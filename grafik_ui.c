@@ -24,7 +24,7 @@
 #include "widget/TextField.h"
 
 #include "widglist.h"
-#include "pinpop.h"
+#include "xawutils/pinpop.h"
 #include "haupt_ui.h"
 
 #include "common/msant_strings.h"

@@ -40,7 +40,7 @@
 #include "widget/SlPaned.h"
 
 #include "msant_strings.h"
-#include "olnames.h"
+#include "common/olnames.h"
 #include "widglist.h"
 #include "haupt_ui.h"
 

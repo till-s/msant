@@ -1,0 +1,14 @@
+#include "../Imake.opts"
+
+CSOURCE = pinpop.c pix.c
+
+SRCS =  $(CSOURCE) $(FSOURCE) $(PSOURCE)
+LIBOBJS =  $(CSOURCE:%.c=%.o) $(FSOURCE:%.F=%.o)
+OBJS = $(LIBOBJS) $(PSOURCE:%.c=%.o)
+
+INCLUDES=-I../widget
+
+includes:: $(SRCS)
+
+NormalLibraryTarget(xawutils,$(LIBOBJS))
+DependTarget()

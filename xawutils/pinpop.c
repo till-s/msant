@@ -41,7 +41,7 @@
 #include <X11/Xaw3d/Command.h>
 #include <X11/Xaw3d/Toggle.h>
 #ifdef USE_FOCUSFORM
-#include "widget/FocusForm.h"
+#include "FocusForm.h"
 #else
 #include <X11/Xaw3d/Form.h>
 #endif
@@ -49,7 +49,7 @@
 #include <X11/Xaw/Command.h>
 #include <X11/Xaw/Toggle.h>
 #ifdef USE_FOCUSFORM
-#include "widget/FocusForm.h"
+#include "FocusForm.h"
 #else
 #include <X11/Xaw/Form.h>
 #endif

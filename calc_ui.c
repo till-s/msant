@@ -18,7 +18,7 @@
 #include "widget/TextField.h"
 
 #include "widglist.h"
-#include "pinpop.h"
+#include "xawutils/pinpop.h"
 #include "graf.h"
 
 #include "calc_ui.h"
