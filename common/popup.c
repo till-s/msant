@@ -171,6 +171,7 @@ String defname="notice",name;
 Widget w_text,w_control;
 String label;
 Dimension max_width,width,scratch1;
+Boolean wasRealized;
 int	  def_dist;
 Arg args[10];
 int j,nbuttons;
@@ -320,7 +321,11 @@ for (pChoice=pFirst; pChoice; pChoice=pChoice->next) {
 }
 
 
+wasRealized = XtIsRealized(ndp->wid);
 XtRealizeWidget(ndp->wid);
+if ( ! wasRealized ) {
+ deal_with_wmproto(ndp->wid, False);
+}
 PlaceNotice(ndp,wid);
 ndp->subwid_list=pFirst;
 return (ndp);

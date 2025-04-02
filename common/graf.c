@@ -377,7 +377,7 @@ char	*argv[];
   */
  A_wm_delete_window=XInternAtom(disp,"WM_DELETE_WINDOW",True);
  A_wm_protocols=XInternAtom(disp,"WM_PROTOCOLS",True);
- deal_with_wmproto(w_toplevel);
+ deal_with_wmproto(w_toplevel, True);
 
  if ((err=register_to_widgetlist(input_haupt+1,
                                 sizeof(TextFieldTabEl)

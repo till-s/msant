@@ -35,7 +35,7 @@
 
 #define BELLCHR 7
 
-static void QuitHandler();
+static void QuitOrPopdownHandler();
 static void ShowCanvasHandler();
 static void TextFieldFocusOutHandler();
 
@@ -280,11 +280,12 @@ XawViewportSetCoordinates(GetScrollable(wid),*ortx,*orty);
 }
 #endif
 
-void deal_with_wmproto(toplevel)
+void deal_with_wmproto(toplevel, doQuit)
  Widget toplevel;
+ Boolean doQuit;
 {
  XSetWMProtocols(XtDisplay(toplevel),XtWindow(toplevel),&A_wm_delete_window,1);
- XtInsertEventHandler(toplevel,0,True,QuitHandler,0,XtListHead);
+ XtInsertEventHandler(toplevel,0,True,QuitOrPopdownHandler,(XtPointer)doQuit,XtListHead);
 }
 
 Widget GetTxtFldWid(wid)
@@ -296,7 +297,7 @@ Widget wid;
  return wid;
 }
 
-static void QuitHandler(wid,p1,ev,cont)
+static void QuitOrPopdownHandler(wid,p1,ev,cont)
 
 Widget wid;
 XtPointer p1;
@@ -316,10 +317,14 @@ if (ev->type!=ClientMessage) return;
  */
 if (!lock && ev->xclient.message_type==A_wm_protocols &&
     *((Atom*)&ev->xclient.data)==A_wm_delete_window) {
- lock=True;
- if ( CheckIfQuit(buttonlist[BUTT_QUIT].t_wid,zeichnung)) exit(0);
- *cont=False;
- lock=False;
+ if ( p1 ) {
+  lock=True;
+  if ( CheckIfQuit(buttonlist[BUTT_QUIT].t_wid,zeichnung)) exit(0);
+  *cont=False;
+  lock=False;
+ } else {
+  XtPopdown(wid);
+ }
 }
 }
 

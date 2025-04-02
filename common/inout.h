@@ -56,7 +56,7 @@ void sens_desens(/* Widget wid, Boolean sensitive, Widget focuswidget*/);
 void AdjustView(/*Widget canvas; Position *x,*y*/);
 
 /* Teilnahme am wm_delete_window protokoll */
-void deal_with_wmproto(/* Widget toplevel*/);
+void deal_with_wmproto(/* Widget toplevel, Boolean quitNotPopdown*/);
 
 /* Das TextField Widget aus dem Widget, in welchem
  * Keyboard-Events verarbeitet werden (Textedit),

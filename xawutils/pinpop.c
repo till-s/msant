@@ -271,7 +271,11 @@ CBPinup(w,cld,cad)
 #endif
 {
 	Widget pop=(Widget)cld;
+	Boolean wasRealized = XtIsRealized(pop);
 	XtPopup(pop,XtGrabNone);
+	if ( ! wasRealized ) {
+		deal_with_wmproto(pop, False);
+	}
 	XRaiseWindow(XtDisplay(pop),XtWindow(pop));
 }
 
