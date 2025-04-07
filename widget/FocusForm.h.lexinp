@@ -47,7 +47,11 @@ The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
 */
 
+#ifdef XAW3D
+#include <X11/Xaw3d/Form.h>
+#else
 #include <X11/Xaw/Form.h>
+#endif
 
 /***********************************************************************
  *
